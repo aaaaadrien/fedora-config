@@ -1,0 +1,85 @@
+#add:packagename
+#del:packagename
+
+# GNOME Apps
+add:seahorse
+add:gnome-tweaks
+del:gnome-boxes
+del:abrt
+
+# CLI : Console
+add:screen
+add:vim-enhanced
+
+# CLI : Scripting
+add:ShellCheck
+
+# CLI : Système
+add:htop
+add:nmon
+add:glances
+add:neofetch
+add:inxi
+add:lm_sensors
+
+# CLI : Disques
+add:nwipe
+add:sg3_utils
+
+# CLI : Réseau
+add:netcat
+add:nmap
+add:iftop
+add:traceroute
+add:speedtest-cli
+add:fuse-sshfs
+add:telnet
+
+# CLI : backup
+add:borgbackup
+
+# CLI : Multimedia
+add:abcde
+add:sox
+add:vorbisgain
+add:mediainfo
+add:yt-dlp
+
+# CLI : Divers
+add:git
+add:pv
+
+# GUI : Multimedia
+add:clementine
+add:smplayer
+add:soundconverter
+add:kdenlive
+add:audacity
+add:easytag
+add:peek
+add:obs-studio
+
+# GUI : Virtualisation
+add:VirtualBox
+
+# GUI : Graphisme
+add:gimp
+add:flameshot
+
+# GUI : Reseau
+add:remmina
+del:anydesk
+
+# GUI : Interne
+add:epiphany
+add:vivaldi-stable
+add:google-chrome-stable
+
+# GUI : Utilitaires
+add:cool-retro-term
+add:guake
+
+# GUI : Sécurité
+add:keepassxc
+
+
