@@ -74,6 +74,7 @@ del_flatpak()
 #################
 ### PROGRAMME ###
 #################
+ICI=$(dirname "$0")
 
 ### CONF DNF
 echo "1 - Vérification configuration DNF"
@@ -112,13 +113,13 @@ echo "4 - Vérification configuration des dépôts"
 if ! check_pkg rpmfusion-free-release
 then
 	echo -n "- - - Installation RPM Fusion Free : "
-	add_pkg https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+	add_pkg "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
 	check_cmd
 fi
 if ! check_pkg rpmfusion-nonfree-release
 then
 	echo -n "- - - Installation RPM Fusion Nonfree : "
-	add_pkg https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+	add_pkg "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
 	check_cmd
 fi
 
@@ -227,7 +228,7 @@ done
 
 ### INSTALL/SUPPRESSION RPMS SELON LISTE
 echo "9 - Gestion des paquets RPM"
-while read line
+while read -r line
 do
 	if [[ "$line" == add:* ]]
 	then
@@ -250,11 +251,11 @@ do
 			check_cmd
 		fi
 	fi
-done < packages.list
+done < "$ICI/packages.list"
 
 ### INSTALL/SUPPRESSION FLATPAK SELON LISTE
 echo "10- Gestion des paquets FLATPAK"
-while read line
+while read -r line
 do
 	if [[ "$line" == add:* ]]
 	then
@@ -277,5 +278,5 @@ do
 			check_cmd
 		fi
 	fi
-done < flatpak.list
+done < "$ICI/flatpak.list"
 
