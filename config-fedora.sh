@@ -10,7 +10,12 @@ GNOMECOMP="gnome-extensions-app gnome-shell-extension-dash-to-dock gnome-shell-e
 ### FIN VARIABLES ###
 #####################
 
-# TODO tester si root
+# Tester si root
+if [[ $(id -u) -ne "0" ]]
+then
+	echo -e "\033[31mERREUR\033[0m Lancer le script avec les droits root (su - root ou sudo)"
+	exit 1;
+fi
 
 #################
 ### FONCTIONS ###

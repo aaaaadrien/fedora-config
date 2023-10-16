@@ -18,9 +18,11 @@ add:ShellCheck
 add:htop
 add:nmon
 add:glances
-add:neofetch
+del:neofetch
+add:screenfetch
 add:inxi
 add:lm_sensors
+add:nvtop
 
 # CLI : Disques
 add:nwipe
@@ -71,7 +73,7 @@ add:remmina
 del:anydesk
 
 # GUI : Interne
-add:epiphany
+del:epiphany
 add:vivaldi-stable
 add:google-chrome-stable
 
