@@ -65,7 +65,7 @@ check_flatpak()
 }
 add_flatpak()
 {
-	flatpak install flathub --noninteractive -y "$1" > /dev/null
+	flatpak install flathub --noninteractive -y "$1" > /dev/null 2>&1
 }
 del_flatpak()
 {
