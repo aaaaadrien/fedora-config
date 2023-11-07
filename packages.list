@@ -60,6 +60,7 @@ add:audacity
 add:easytag
 add:peek
 add:obs-studio
+add:obs-studio-plugin-webkitgtk
 
 # GUI : Virtualisation
 add:VirtualBox

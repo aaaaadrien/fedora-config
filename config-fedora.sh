@@ -4,7 +4,7 @@
 ### VARIABLES ###
 #################
 RPMFUSIONCOMP="rpmfusion-free-appstream-data rpmfusion-nonfree-appstream-data rpmfusion-free-release-tainted rpmfusion-nonfree-release-tainted"
-CODEC="gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-good-extras gstreamer1-plugins-bad-free-extras gstreamer1-plugins-ugly-free gstreamer1-plugin-libav gstreamer1-plugins-ugly libdvdcss"
+CODEC="gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-good-extras gstreamer1-plugins-bad-free-extras gstreamer1-plugins-ugly-free gstreamer1-plugin-libav gstreamer1-plugins-ugly libdvdcss gstreamer1-plugin-openh264"
 GNOMECOMP="gnome-extensions-app gnome-shell-extension-dash-to-dock gnome-shell-extension-appindicator adwaita-qt5 qgnomeplatform-qt5"
 #####################
 ### FIN VARIABLES ###
@@ -57,7 +57,7 @@ del_pkg()
 }
 swap_pkg()
 {
-	dnf swap -y "$1" "$2" --allowerasing > /dev/null
+	dnf swap -y "$1" "$2" --allowerasing > /dev/null 2>&1
 }
 check_flatpak()
 {
@@ -168,7 +168,7 @@ then
 	check_cmd
 fi
 
-### COMPOSANTS RPM FUSION
+## COMPOSANTS RPM FUSION
 echo "5 - Vérification composants RPM Fusion"
 for p in $RPMFUSIONCOMP
 do
@@ -187,27 +187,27 @@ echo "6 - Vérification swapping des composants"
 if check_pkg "ffmpeg-free"
 then
 	echo -n "- - - Swapping ffmpeg : "
-	swap_pkg "ffmpeg-free" "ffmpeg"
+	swap_pkg "ffmpeg-free" "ffmpeg" 
 	check_cmd
 fi
 
 ## MESA-VA
-if check_pkg "mesa-va-drivers"
-then
-	echo -n "- - - Swapping MESA VAAPI : "
-	swap_pkg "mesa-va-drivers" "mesa-va-drivers-freeworld"
-	check_cmd
-fi
+#if check_pkg "mesa-va-drivers"
+#then
+#	echo -n "- - - Swapping MESA VAAPI : "
+#	swap_pkg "mesa-va-drivers" "mesa-va-drivers-freeworld"
+#	check_cmd
+#fi
 
 ## MESA-VDPAU
-if check_pkg "mesa-vdpau-drivers"
-then
-	echo -n "- - - Swapping MESA VDPAU : "
-	swap_pkg "mesa-vdpau-drivers" "mesa-vdpau-drivers-freeworld"
-	check_cmd
-fi
+#if check_pkg "mesa-vdpau-drivers"
+#then
+#	echo -n "- - - Swapping MESA VDPAU : "
+#	swap_pkg "mesa-vdpau-drivers" "mesa-vdpau-drivers-freeworld"
+#	check_cmd
+#fi
 
-### INSTALL CODECS
+## INSTALL CODECS
 echo "7 - Vérification CoDec"
 for p in $CODEC
 do
