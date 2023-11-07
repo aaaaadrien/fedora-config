@@ -59,9 +59,10 @@ add:soundconverter
 add:kdenlive
 add:audacity
 add:easytag
-add:peek
+del:peek
 add:obs-studio
 add:obs-studio-plugin-webkitgtk
+add:mediainfo-gui
 
 # GUI : Virtualisation
 add:VirtualBox
@@ -74,10 +75,12 @@ add:flameshot
 add:remmina
 del:anydesk
 
-# GUI : Interne
+# GUI : Internet
 del:epiphany
+add:evolution
 add:vivaldi-stable
 add:google-chrome-stable
+add:telegram-desktop
 
 # GUI : Utilitaires
 add:cool-retro-term
