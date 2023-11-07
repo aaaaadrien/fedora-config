@@ -1,0 +1,8 @@
+# Ne pas écraser le vivaldi-snapshot sopranos
+echo "exclude=vivaldi-snapshot" >> /etc/dnf/dnf.conf
+
+# Sysctl
+echo "vm.swappiness = 10" >> /etc/sysctl.d/adrien.conf
+echo "kernel.sysrq = 1" >> /etc/sysctl.d/adrien.conf
+
+
