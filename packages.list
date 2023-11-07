@@ -50,6 +50,7 @@ add:yt-dlp
 # CLI : Divers
 add:git
 add:pv
+add:android-tools
 
 # GUI : Multimedia
 add:clementine
