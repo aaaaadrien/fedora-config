@@ -19,7 +19,8 @@ add:htop
 add:nmon
 add:glances
 del:neofetch
-add:screenfetch
+del:screenfetch
+add:fastfetch
 add:inxi
 add:lm_sensors
 add:nvtop
