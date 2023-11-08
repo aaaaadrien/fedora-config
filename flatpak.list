@@ -2,6 +2,6 @@ add:com.github.marinm.songrec
 add:com.usebottles.bottles
 add:com.github.tchx84.Flatseal
 add:com.anydesk.Anydesk
-add:com.discordapp.Discord
+del:com.discordapp.Discord
 del:org.telegram.desktop
 add:com.valvesoftware.Steam

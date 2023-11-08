@@ -1,9 +1,14 @@
 #add:packagename
 #del:packagename
 
+# Français sur système installé en anglais
+add:aspell-fr
+add:libreoffice-langpack-fr
+
 # GNOME Apps
 add:seahorse
 add:gnome-tweaks
+add:file-roller
 del:gnome-boxes
 del:abrt
 
@@ -67,6 +72,7 @@ add:mediainfo-gui
 
 # GUI : Virtualisation
 add:VirtualBox
+add:virt-viewer
 
 # GUI : Graphisme
 add:gimp
@@ -82,6 +88,7 @@ add:evolution
 add:vivaldi-stable
 add:google-chrome-stable
 add:telegram-desktop
+add:discord
 
 # GUI : Utilitaires
 add:cool-retro-term
