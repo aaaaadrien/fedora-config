@@ -285,3 +285,45 @@ do
 	fi
 done < "$ICI/flatpak.list"
 
+### Vérif configuration système
+echo "11- Configuration personnalisée du système"
+SYSCTLFIC="/etc/sysctl.d/adrien.conf"
+if [[ ! -e "$SYSCTLFIC" ]]
+then
+	echo -n "- - - Création du fichier $SYSCTLFIC"
+	touch "$SYSCTLFIC"
+	check_cmd
+fi
+if [[ $(grep -c 'vm.swappiness=' "$SYSCTLFIC") -lt 1 ]]
+then
+	echo -n "- - - Définition du swapiness à 10 : "
+	echo "vm.swappiness = 10" >> "$SYSCTLFIC"
+	check_cmd
+fi
+if [[ $(grep -c 'kernel.sysrq=' "$SYSCTLFIC") -lt 1 ]]
+then
+	echo -n "- - - Définition des sysrq à 1 : "
+	echo "kernel.sysrq = 1" >> "$SYSCTLFIC"
+	check_cmd
+fi
+
+PROFILEFIC="/etc/profile.d/adrien.sh"
+if [[ ! -e "$PROFILEFIC" ]]
+then
+        echo -n "- - - Création du fichier $PROFILEFIC"
+        touch "$PROFILEFIC"
+        check_cmd
+fi
+if [[ $(grep -c 'QT_QPA_PLATFORMTHEME' "$PROFILEFIC") -lt 1 ]]
+then
+	echo -n "- - - Définition du thème des applis KDE à gnome : "
+	echo "export QT_QPA_PLATFORMTHEME=gnome" >> "$PROFILEFIC"
+	check_cmd
+fi
+if [[ $(grep -c 'QT_QPA_PLATFORM' "$PROFILEFIC") -lt 1 ]]
+then
+	echo -n "- - - Fix du décalage des menus des applis Qt sous Wayland : "
+	echo "export QT_QPA_PLATFORM=xcb" >> "$PROFILEFIC"
+	check_cmd
+fi
+

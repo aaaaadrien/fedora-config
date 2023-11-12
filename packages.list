@@ -9,6 +9,7 @@ add:libreoffice-langpack-fr
 add:seahorse
 add:gnome-tweaks
 add:file-roller
+add:dconf-editor
 del:gnome-boxes
 del:abrt
 

@@ -1,8 +1,2 @@
-# Ne pas écraser le vivaldi-snapshot sopranos
+## Ne pas écraser le vivaldi-snapshot sopranos (Vivaldi vert) qui fait conflit avec vivaldi-snapshot noir présent dans les dépôts
 echo "exclude=vivaldi-snapshot" >> /etc/dnf/dnf.conf
-
-# Sysctl
-echo "vm.swappiness = 10" >> /etc/sysctl.d/adrien.conf
-echo "kernel.sysrq = 1" >> /etc/sysctl.d/adrien.conf
-
-
