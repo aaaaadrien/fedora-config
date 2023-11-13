@@ -17,6 +17,13 @@ then
 	exit 1;
 fi
 
+# Activation de DNF-5 si présent
+if [[ -x /usr/bin/dnf5 ]]
+then
+	alias dnf="/usr/bin/dnf5"
+	echo -e "\033[36mDNF-5 détecté : Utilisation de DNF-5 au lieu de DNF-3 \033[0m"
+fi
+
 #################
 ### FONCTIONS ###
 #################
