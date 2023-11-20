@@ -82,7 +82,7 @@ del_flatpak()
 ICI=$(dirname "$0")
 
 ### CONF DNF
-echo "1 - Vérification configuration DNF"
+echo "01- Vérification configuration DNF"
 if [[ $(grep -c 'fastestmirror=' /etc/dnf/dnf.conf) -lt 1 ]]
 then
 	echo -n "- - - Correction miroirs rapides : "
@@ -101,19 +101,26 @@ then
 	echo "countme=false" >> /etc/dnf/dnf.conf
 	check_cmd
 fi
+if [[ $(grep -c 'deltarpm=' /etc/dnf/dnf.conf) -lt 1 ]]
+then
+        echo -n "- - - Correction deltarpm désactivés : "
+        echo "deltarpm=false" >> /etc/dnf/dnf.conf
+        check_cmd
+fi
+
 
 ### MAJ RPM
-echo -n "2 - Mise à jour du système DNF : "
+echo -n "02- Mise à jour du système DNF : "
 dnf update -y > /dev/null  2>&1
 check_cmd
 
 ### MAJ FP
-echo -n "3 - Mise à jour du système FLATPAK : "
+echo -n "03- Mise à jour du système FLATPAK : "
 flatpak update --noninteractive > /dev/null  2>&1
 check_cmd
 
 ### CONFIG DEPOTS
-echo "4 - Vérification configuration des dépôts"
+echo "04- Vérification configuration des dépôts"
 ## RPMFUSION
 if ! check_pkg rpmfusion-free-release
 then
@@ -169,7 +176,7 @@ then
 fi
 
 ## COMPOSANTS RPM FUSION
-echo "5 - Vérification composants RPM Fusion"
+echo "05- Vérification composants RPM Fusion"
 for p in $RPMFUSIONCOMP
 do
 	if ! check_pkg "$p"
@@ -181,7 +188,7 @@ do
 done
 
 ### SWAPPING DES SOFT 
-echo "6 - Vérification swapping des composants"
+echo "06- Vérification swapping des composants"
 
 ## FFMPEG
 if check_pkg "ffmpeg-free"
@@ -208,7 +215,7 @@ fi
 #fi
 
 ## INSTALL CODECS
-echo "7 - Vérification CoDec"
+echo "07- Vérification CoDec"
 for p in $CODEC
 do
 	if ! check_pkg "$p"
@@ -220,7 +227,7 @@ do
 done
 
 ### INSTALL OUTILS GNOME
-echo "8 - Vérification composants GNOME"
+echo "08- Vérification composants GNOME"
 for p in $GNOMECOMP
 do
 	if ! check_pkg "$p"
@@ -232,7 +239,7 @@ do
 done
 
 ### INSTALL/SUPPRESSION RPMS SELON LISTE
-echo "9 - Gestion des paquets RPM"
+echo "09- Gestion des paquets RPM"
 while read -r line
 do
 	if [[ "$line" == add:* ]]
