@@ -71,6 +71,19 @@ del_flatpak()
 {
 	flatpak uninstall --noninteractive -y "$1" > /dev/null && flatpak uninstall --unused  --noninteractive -y > /dev/null
 }
+
+refresh_cache()
+{
+	dnf check-update fedora-release > /dev/null 2>&1
+}
+check_updates_rpm()
+{
+	yes n | dnf upgrade
+}
+check_updates_flatpak()
+{
+	yes n | flatpak update
+}
 #####################
 ### FIN FONCTIONS ###
 #####################
@@ -80,6 +93,28 @@ del_flatpak()
 ### PROGRAMME ###
 #################
 ICI=$(dirname "$0")
+
+
+## CAS CHECK-UPDATES
+if [[ "$1" -eq "check" ]]
+then
+	echo -n "01- - Refresh du cache : "
+	refresh_cache
+	check_cmd
+
+	echo "02- - Mises à jour disponibles RPM : "
+	echo -e "\033[36m"
+	check_updates_rpm
+	echo -e "\033[0m"
+
+	echo "03- - Mises à jour disponibles FLATPAK : "
+	echo -e "\033[36m"
+	check_updates_flatpak
+	echo -e "\033[0m"
+
+	exit;
+fi
+
 
 ### CONF DNF
 echo "01- Vérification configuration DNF"
