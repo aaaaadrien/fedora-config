@@ -96,7 +96,7 @@ ICI=$(dirname "$0")
 
 
 ## CAS CHECK-UPDATES
-if [[ "$1" -eq "check" ]]
+if [[ "$1" = "check" ]]
 then
 	echo -n "01- - Refresh du cache : "
 	refresh_cache
