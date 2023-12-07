@@ -6,9 +6,22 @@
 RPMFUSIONCOMP="rpmfusion-free-appstream-data rpmfusion-nonfree-appstream-data rpmfusion-free-release-tainted rpmfusion-nonfree-release-tainted"
 CODEC="gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-good-extras gstreamer1-plugins-bad-free-extras gstreamer1-plugins-ugly-free gstreamer1-plugin-libav gstreamer1-plugins-ugly libdvdcss gstreamer1-plugin-openh264"
 GNOMECOMP="gnome-extensions-app gnome-shell-extension-dash-to-dock gnome-shell-extension-appindicator adwaita-qt5 adwaita-qt6 qgnomeplatform-qt5 qgnomeplatform-qt6"
+LOGFILE="/tmp/config-fedora.log"
 #####################
 ### FIN VARIABLES ###
 #####################
+
+
+####################
+### DEBUT SCRIPT ###
+####################
+echo -e "\033[36m"
+echo "Pour suivre la progression : tail -f $LOGFILE"
+echo -e "\033[0m"
+
+# Date dans le log
+echo '-------------------' >> "$LOGFILE"
+date >> "$LOGFILE"
 
 # Tester si root
 if [[ $(id -u) -ne "0" ]]
@@ -146,12 +159,12 @@ fi
 
 ### MAJ RPM
 echo -n "02- Mise à jour du système DNF : "
-dnf update -y > /dev/null  2>&1
+dnf update -y >> "$LOGFILE" 2>&1
 check_cmd
 
 ### MAJ FP
 echo -n "03- Mise à jour du système FLATPAK : "
-flatpak update --noninteractive > /dev/null  2>&1
+flatpak update --noninteractive >> "$LOGFILE"  2>&1
 check_cmd
 
 ### CONFIG DEPOTS

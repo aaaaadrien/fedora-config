@@ -30,6 +30,7 @@ add:fastfetch
 add:inxi
 add:lm_sensors
 add:nvtop
+add:ncdu
 
 # CLI : Disques
 add:nwipe
