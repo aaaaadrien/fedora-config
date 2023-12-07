@@ -398,7 +398,7 @@ echo ""
 # Verif si reboot nécessaire
 if ! need_reboot
 then
-	echo -n -e "\033[43m/\ REDÉMARRAGE NÉCESSAIRE\033[0m\033[33m : Voulez-vous redémarrer le système maintenant ? [y/N] : "
+	echo -n -e "\033[5;33m/\ REDÉMARRAGE NÉCESSAIRE\033[0m\033[33m : Voulez-vous redémarrer le système maintenant ? [y/N] : "
 	read rebootuser
 	rebootuser=${rebootuser:-n}
 	echo "$rebootuser"
