@@ -97,6 +97,10 @@ check_updates_flatpak()
 {
 	yes n | flatpak update
 }
+need_reboot()
+{
+	needs-restarting -r >> "$LOGFILE" 2>&1
+}
 #####################
 ### FIN FONCTIONS ###
 #####################
@@ -154,6 +158,12 @@ then
         echo -n "- - - Correction deltarpm désactivés : "
         echo "deltarpm=false" >> /etc/dnf/dnf.conf
         check_cmd
+fi
+if ! check_pkg "dnf-utils"
+then
+	echo -n "- - - Installation dnf-utils : "
+	add_pkg "dnf-utils"
+	check_cmd
 fi
 
 
@@ -382,3 +392,18 @@ then
 	check_cmd
 fi
 
+# Fin des actions automatisées
+echo ""
+
+# Verif si reboot nécessaire
+if ! need_reboot
+then
+	echo -n -e "\033[43m/\ REDÉMARRAGE NÉCESSAIRE\033[0m\033[33m : Voulez-vous redémarrer le système maintenant ? [y/N] : "
+	read rebootuser
+	rebootuser=${rebootuser:-n}
+	echo "$rebootuser"
+	if [[ ${rebootuser,,} == "y" ]]
+	then
+		systemctl reboot
+	fi
+fi
