@@ -5,6 +5,9 @@
 add:aspell-fr
 add:libreoffice-langpack-fr
 
+# Specifque Hardware
+add:amd-ucode-firmware
+
 # GNOME Apps
 add:seahorse
 add:gnome-tweaks
@@ -98,5 +101,4 @@ add:guake
 
 # GUI : Sécurité
 add:keepassxc
-
 
