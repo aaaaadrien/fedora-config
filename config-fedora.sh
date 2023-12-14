@@ -392,6 +392,57 @@ then
 	check_cmd
 fi
 
+if ! check_pkg "pigz"
+then
+	echo -n "- - - Installation pigz : "
+	add_pkg "pigz"
+	check_cmd
+fi
+if [[ ! -e /usr/local/bin/gzip ]]
+then
+	echo -n "- - - Configuration gzip multithread : "
+	ln -s /usr/bin/pigz /usr/local/bin/gzip
+	check_cmd
+fi
+if [[ ! -e /usr/local/bin/gunzip ]]
+then
+	echo -n "- - - Configuration gunzip multithread : "
+	ln -s /usr/local/bin/gzip /usr/local/bin/gunzip
+	check_cmd
+fi
+if [[ ! -e /usr/local/bin/zcat ]]
+then
+	echo -n "- - - Configuration zcat multithread : "
+	ln -s /usr/local/bin/gzip /usr/local/bin/zcat
+	check_cmd
+fi
+
+
+if ! check_pkg "lbzip2"
+then
+	echo -n "- - - Installation lbzip2 : "
+	add_pkg "lbzip2"
+	check_cmd
+fi
+if [[ ! -e /usr/local/bin/bzip2 ]]
+then
+	echo -n "- - - Configuration bzip2 multithread : "
+	ln -s /usr/bin/lbzip2 /usr/local/bin/bzip2
+	check_cmd
+fi
+if [[ ! -e /usr/local/bin/bunzip2 ]]
+then
+	echo -n "- - - Configuration bunzip2 multithread : "
+	ln -s /usr/local/bin/bzip2 /usr/local/bin/bunzip2
+	check_cmd
+fi
+if [[ ! -e /usr/local/bin/bzcat ]]
+then
+	echo -n "- - - Configuration bzcat multithread : "
+	ln -s /usr/local/bin/bzip2 /usr/local/bin/bzcat
+	check_cmd
+fi
+
 # Fin des actions automatisées
 echo ""
 
