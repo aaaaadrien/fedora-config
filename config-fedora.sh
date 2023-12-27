@@ -172,13 +172,19 @@ echo -n "02- Mise à jour du système DNF : "
 dnf update -y >> "$LOGFILE" 2>&1
 check_cmd
 
+
+### MAJ FP
+echo -n "03- Mise à jour du système FLATPAK : "
+flatpak update --noninteractive >> "$LOGFILE"  2>&1
+check_cmd
+
+
 # Verif si reboot nécessaire
 if ! need_reboot
 then
-	echo -n -e "\033[5;33m/\ REDÉMARRAGE NÉCESSAIRE\033[0m\033[33m : Voulez-vous redémarrer le système maintenant ? [y/N] : "
+	echo -n -e "\033[5;33m/\ REDÉMARRAGE NÉCESSAIRE\033[0m\033[33m : Voulez-vous redémarrer le système maintenant ? [y/N] : \033[0m"
 	read rebootuser
 	rebootuser=${rebootuser:-n}
-	echo "$rebootuser"
 	if [[ ${rebootuser,,} == "y" ]]
 	then
 		systemctl reboot
@@ -186,11 +192,6 @@ then
 	fi
 fi
 
-
-### MAJ FP
-echo -n "03- Mise à jour du système FLATPAK : "
-flatpak update --noninteractive >> "$LOGFILE"  2>&1
-check_cmd
 
 ### CONFIG DEPOTS
 echo "04- Vérification configuration des dépôts"
