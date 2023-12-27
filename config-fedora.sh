@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 #################
 ### VARIABLES ###
@@ -171,6 +171,21 @@ fi
 echo -n "02- Mise à jour du système DNF : "
 dnf update -y >> "$LOGFILE" 2>&1
 check_cmd
+
+# Verif si reboot nécessaire
+if ! need_reboot
+then
+	echo -n -e "\033[5;33m/\ REDÉMARRAGE NÉCESSAIRE\033[0m\033[33m : Voulez-vous redémarrer le système maintenant ? [y/N] : "
+	read rebootuser
+	rebootuser=${rebootuser:-n}
+	echo "$rebootuser"
+	if [[ ${rebootuser,,} == "y" ]]
+	then
+		systemctl reboot
+		exit
+	fi
+fi
+
 
 ### MAJ FP
 echo -n "03- Mise à jour du système FLATPAK : "
@@ -446,15 +461,3 @@ fi
 # Fin des actions automatisées
 echo ""
 
-# Verif si reboot nécessaire
-if ! need_reboot
-then
-	echo -n -e "\033[5;33m/\ REDÉMARRAGE NÉCESSAIRE\033[0m\033[33m : Voulez-vous redémarrer le système maintenant ? [y/N] : "
-	read rebootuser
-	rebootuser=${rebootuser:-n}
-	echo "$rebootuser"
-	if [[ ${rebootuser,,} == "y" ]]
-	then
-		systemctl reboot
-	fi
-fi
