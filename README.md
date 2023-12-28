@@ -26,6 +26,7 @@ Ma configuration de Fedora (base Fedora Workstation)
 Les 3 fichiers mentionnés ci-dessus doivent être dans le même dossier.
 
 Exécuter avec les droits de super-utilisateur le scipt principal :
+
     ./config-fedora.sh
 
 Celui-ci peut être exécuté plusieurs fois de suite. Si des étapes sont déjà configurées, elles ne le seront pas à nouveau. De fait, le script peut être utilisé pour : 
