@@ -15,20 +15,22 @@ LOGFILE="/tmp/config-fedora.log"
 ####################
 ### DEBUT SCRIPT ###
 ####################
-echo -e "\033[36m"
-echo "Pour suivre la progression : tail -f $LOGFILE"
-echo -e "\033[0m"
-
-# Date dans le log
-echo '-------------------' >> "$LOGFILE"
-date >> "$LOGFILE"
-
 # Tester si root
 if [[ $(id -u) -ne "0" ]]
 then
 	echo -e "\033[31mERREUR\033[0m Lancer le script avec les droits root (su - root ou sudo)"
 	exit 1;
 fi
+
+# Infos fichier log
+echo -e "\033[36m"
+echo "Pour suivre la progression des mises à jour : tail -f $LOGFILE"
+echo -e "\033[0m"
+
+# Date dans le log
+echo '-------------------' >> "$LOGFILE"
+date >> "$LOGFILE"
+
 
 #################
 ### FONCTIONS ###
@@ -84,6 +86,15 @@ del_flatpak()
 {
 	flatpak uninstall --noninteractive -y "$1" > /dev/null && flatpak uninstall --unused  --noninteractive -y > /dev/null
 }
+check_copr()
+{
+	COPR_ENABLED=$(dnf copr list --enabled | grep -c "$1")
+	return $COPR_ENABLED
+}
+add_copr()
+{
+	dnf copr enable -y "$1" > /dev/null 2>&1
+}
 
 refresh_cache()
 {
@@ -100,6 +111,17 @@ check_updates_flatpak()
 need_reboot()
 {
 	needs-restarting -r >> "$LOGFILE" 2>&1
+}
+ask_reboot()
+{
+	echo -n -e "\033[5;33m/\ REDÉMARRAGE NÉCESSAIRE\033[0m\033[33m : Voulez-vous redémarrer le système maintenant ? [y/N] : \033[0m"
+	read rebootuser
+	rebootuser=${rebootuser:-n}
+	if [[ ${rebootuser,,} == "y" ]]
+	then
+		systemctl reboot
+		exit
+	fi
 }
 #####################
 ### FIN FONCTIONS ###
@@ -178,23 +200,24 @@ echo -n "03- Mise à jour du système FLATPAK : "
 flatpak update --noninteractive >> "$LOGFILE"  2>&1
 check_cmd
 
-
 # Verif si reboot nécessaire
 if ! need_reboot
 then
-	echo -n -e "\033[5;33m/\ REDÉMARRAGE NÉCESSAIRE\033[0m\033[33m : Voulez-vous redémarrer le système maintenant ? [y/N] : \033[0m"
-	read rebootuser
-	rebootuser=${rebootuser:-n}
-	if [[ ${rebootuser,,} == "y" ]]
-	then
-		systemctl reboot
-		exit
-	fi
+	ask_reboot
 fi
 
 
 ### CONFIG DEPOTS
 echo "04- Vérification configuration des dépôts"
+## COPR PERSO
+if check_copr 'adriend/fedora-apps'
+then
+	echo -n "- - - Activation COPR adriend/fedora-apps : "
+	add_copr "adriend/fedora-apps"
+	check_cmd
+fi
+
+
 ## RPMFUSION
 if ! check_pkg rpmfusion-free-release
 then
@@ -459,6 +482,8 @@ then
 	check_cmd
 fi
 
-# Fin des actions automatisées
-echo ""
-
+# Verif si reboot nécessaire
+if ! need_reboot
+then
+	ask_reboot
+fi
