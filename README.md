@@ -46,8 +46,7 @@ Le script lancé va effectuer les opérations suivantes :
 
  1. Personnaliser la configuration de dnf
  2. Mettre à jour les paquets rpm
- 3. Mettre à jour les paquets flatpak
-Proposition de redémarrage du système si nécessaire
+ 3. Mettre à jour les paquets flatpak + *Proposition de redémarrage du système si nécessaire*
  4. Ajouter les dépôts additionnels au système
  5. Ajouter les composants utiles en provenance de RPM Fusion
  6. Permuter certains composants du système par ceux de RPM Fusion
@@ -55,6 +54,5 @@ Proposition de redémarrage du système si nécessaire
  8. Ajouter les composants indispensables de GNOME
  9. Ajouter ou Supprimer les paquets rpm paramétrés dans le fichier packages.list
  10. Ajouter ou Supprimer les paquets flatpak paramétrés dans le fichier flatpak.list 
- 11. Personnaliser la configuration du système
-Proposition de redémarrage du système si nécessaire
+ 11. Personnaliser la configuration du système + *Proposition de redémarrage du système si nécessaire*
 
