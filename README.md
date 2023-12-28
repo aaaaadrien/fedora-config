@@ -1,9 +1,11 @@
 # fedora-config
 My fedora config (from Fedora Workstation).
+
 **Works only with Fedora Workstation with GNOME desktop environment.**
 
 
 Ma configuration de Fedora (base Fedora Workstation)
+
 **Ne fonctionne qu'avec Fedora Workstation disposant de l'environnement de bureau GNOME.**
 
 
@@ -13,14 +15,18 @@ Ma configuration de Fedora (base Fedora Workstation)
 ## Liste des fichiers
 
  **config-fedora.sh** : Script principal 
+
  **packages.list** : Fichier de paquets à ajouter ou retirer du système
+
  **flatpak.list** : Fichier de flatpak à ajouter ou retirer du système
 
 
 ## Fonctionnement
 
 Les 3 fichiers mentionnés ci-dessus doivent être dans le même dossier.
-Exécuter avec les droits de super-utilisateur le scipt principal **config-fedora.sh**
+
+Exécuter avec les droits de super-utilisateur le scipt principal :
+    ./config-fedora.sh
 
 Celui-ci peut être exécuté plusieurs fois de suite. Si des étapes sont déjà configurées, elles ne le seront pas à nouveau. De fait, le script peut être utilisé pour : 
 
@@ -29,7 +35,8 @@ Celui-ci peut être exécuté plusieurs fois de suite. Si des étapes sont déj�
  - Effectuer les mises à jour des paquets
 
 Il est possible de faire uniquement une vérification des mises à jour (listing des paquets et flatpak à mettre à jour sans appliquer de modifications) via l'option check : 
-**config-fedora.sh check**
+
+    ./config-fedora.sh check
 
 
 ## Opérations réalisées par le script
