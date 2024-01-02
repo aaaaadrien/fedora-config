@@ -1,10 +1,10 @@
 # fedora-config
-My fedora config (from Fedora Workstation).
+My fedora config (from Fedora Workstation). Configure & Update Fedora
 
 **Works only with Fedora Workstation with GNOME desktop environment.**
 
 
-Ma configuration de Fedora (base Fedora Workstation)
+Ma configuration de Fedora (base Fedora Workstation). Configure & Met à jour Fedora
 
 **Ne fonctionne qu'avec Fedora Workstation disposant de l'environnement de bureau GNOME.**
 
