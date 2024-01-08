@@ -100,9 +100,17 @@ refresh_cache()
 {
 	dnf check-update fedora-release > /dev/null 2>&1
 }
+refresh_cache_testing()
+{
+	dnf check-update --enablerepo=updates-testing fedora-release > /dev/null 2>&1
+}
 check_updates_rpm()
 {
 	yes n | dnf upgrade
+}
+check_updates_testing_rpm()
+{
+	yes n | dnf upgrade --enablerepo=updates-testing
 }
 check_updates_flatpak()
 {
@@ -125,9 +133,10 @@ ask_reboot()
 }
 ask_maj()
 {
-	echo -n -e "Voulez-vous lancer les MàJ maintenant ? [y/N] : "
+	echo -n -e "\n\033[36mVoulez-vous lancer les MàJ maintenant ? [y/N] : \033[0m"
 	read startupdate
 	startupdate=${startupdate:-n}
+	echo ""
 	if [[ ${startupdate,,} == "y" ]]
 	then
 		bash "$0"
@@ -153,16 +162,28 @@ then
 	check_cmd
 
 	echo "02- - Mises à jour disponibles RPM : "
-	echo -e "\033[36m"
 	check_updates_rpm
-	echo -e "\033[0m"
 
 	echo "03- - Mises à jour disponibles FLATPAK : "
-	echo -e "\033[36m"
 	check_updates_flatpak
-	echo -e "\033[0m"
 
 	ask_maj
+
+	exit;
+fi
+
+## CAS CHECK-UPDATES-TESTING
+if [[ "$1" = "testing" ]]
+then
+	echo -n "01- - Refresh du cache : "
+	refresh_cache_testing
+	check_cmd
+	
+	echo "02- - Mises à jour disponibles RPM TESTING : "
+	check_updates_testing_rpm
+
+	echo -e "\n \033[36mRAPPEL : Pas de MàJ testing gérée par le script ! Pour upgrader un paquet en testing : " 
+	echo -e "         dnf upgrade --enablerepo=updates-testing paquet1 paquet2 \033[0m \n"
 
 	exit;
 fi
