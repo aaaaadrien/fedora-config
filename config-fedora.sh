@@ -123,6 +123,17 @@ ask_reboot()
 		exit
 	fi
 }
+ask_maj()
+{
+	echo -n -e "Voulez-vous lancer les MàJ maintenant ? [y/N] : "
+	read startupdate
+	startupdate=${startupdate:-n}
+	if [[ ${startupdate,,} == "y" ]]
+	then
+		bash "$0"
+	fi
+
+}
 #####################
 ### FIN FONCTIONS ###
 #####################
@@ -150,6 +161,8 @@ then
 	echo -e "\033[36m"
 	check_updates_flatpak
 	echo -e "\033[0m"
+
+	ask_maj
 
 	exit;
 fi
