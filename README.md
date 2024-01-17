@@ -40,6 +40,12 @@ Il est possible de faire uniquement une vérification des mises à jour (listing
     ./config-fedora.sh check
 
 
+Il est possible d'avoir un aperçu des mises à jour disponibles dans les dépôts "testing" via l'option testing : 
+
+    ./config-fedora.sh testing
+
+
+
 ## Opérations réalisées par le script
 
 Le script lancé va effectuer les opérations suivantes : 
