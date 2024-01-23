@@ -20,6 +20,12 @@ del:abrt
 add:screen
 add:vim-enhanced
 
+# CLI : Contrib Fedora
+add:git
+add:koji
+add:python3-fedora
+add:libtirpc-devel
+
 # CLI : Scripting
 add:ShellCheck
 
@@ -64,7 +70,8 @@ add:pv
 add:android-tools
 
 # GUI : Multimedia
-add:clementine
+del:clementine
+add:strawberry
 add:smplayer
 add:soundconverter
 add:kdenlive
