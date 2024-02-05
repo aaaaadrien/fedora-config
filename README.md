@@ -20,8 +20,6 @@ Ma configuration de Fedora (base Fedora Workstation). Configure & Met à jour Fe
 
  **flatpak.list** : Fichier de flatpak à ajouter ou retirer du système
 
- **kexec-rmmod.list** : EXPERIMENTAL : Fichier des modules à retirer avant un reboot avec kexec si problèmes
-
 
 ## Fonctionnement
 
