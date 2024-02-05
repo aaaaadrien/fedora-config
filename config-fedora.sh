@@ -143,13 +143,9 @@ kexec_reboot()
 	echo -e "\n\033[1;4;31mEXPERIMENTAL :\033[0;35m Reboot via kexec ... \033[0m"	
 	LASTKERNEL=$(rpm -q kernel --qf "%{INSTALLTIME} %{VERSION}-%{RELEASE}.%{ARCH}\n" | sort -nr | awk 'NR==1 {print $2}')
 	kexec -l /boot/vmlinuz-$LASTKERNEL --initrd=/boot/initramfs-$LASTKERNEL.img --reuse-cmdline
-	sleep 0.2
-	while read -r MODULE
-	do
-		modprobe -r --remove-holders "$MODULE"
-	done < "$ICI/kexec-rmmod.list"
-	sleep 0.2
-	kexec -e
+	sleep 0.5
+	# kexec -e
+	systemctl kexec
 	exit
 }
 
