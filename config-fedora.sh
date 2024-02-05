@@ -122,7 +122,7 @@ need_reboot()
 }
 ask_reboot()
 {
-	echo -n -e "\033[5;33m/\ REDÉMARRAGE NÉCESSAIRE\033[0m\033[33m : Voulez-vous redémarrer le système maintenant ? [y/N/k] : \033[0m"
+	echo -n -e "\033[5;33m/\ REDÉMARRAGE NÉCESSAIRE\033[0m\033[33m : Voulez-vous redémarrer le système maintenant ? [y/N] : \033[0m"
 	read rebootuser
 	rebootuser=${rebootuser:-n}
 	if [[ ${rebootuser,,} == "y" ]]
@@ -134,14 +134,26 @@ ask_reboot()
 	fi
 	if [[ ${rebootuser,,} == "k" ]]
 	then
-		echo -e "\n\033[1;4;31mEXPERIMENTAL :\033[0;35m Reboot via kexec ... \033[0m"	
-		LASTKERNEL=$(rpm -q kernel --qf "%{INSTALLTIME} %{VERSION}-%{RELEASE}.%{ARCH}\n" | sort -nr | awk 'NR==1 {print $2}')
-		kexec -l /boot/vmlinuz-$LASTKERNEL --initrd=/boot/initramfs-$LASTKERNEL.img --reuse-cmdline
-		sleep 2
-		kexec -e
-		exit
+		kexec_reboot
 	fi
 }
+
+kexec_reboot()
+{
+	echo -e "\n\033[1;4;31mEXPERIMENTAL :\033[0;35m Reboot via kexec ... \033[0m"	
+	LASTKERNEL=$(rpm -q kernel --qf "%{INSTALLTIME} %{VERSION}-%{RELEASE}.%{ARCH}\n" | sort -nr | awk 'NR==1 {print $2}')
+	kexec -l /boot/vmlinuz-$LASTKERNEL --initrd=/boot/initramfs-$LASTKERNEL.img --reuse-cmdline
+	sleep 0.2
+	while read -r MODULE
+	do
+		modprobe -r --remove-holders "$MODULE"
+	done < "$ICI/kexec-rmmod.list"
+	sleep 0.2
+	kexec -e
+	exit
+}
+
+
 ask_maj()
 {
 	echo -n -e "\n\033[36mVoulez-vous lancer les MàJ maintenant ? [y/N] : \033[0m"
