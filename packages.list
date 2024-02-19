@@ -105,6 +105,7 @@ add:discord
 # GUI : Utilitaires
 add:cool-retro-term
 add:guake
+add:timeshift
 
 # GUI : Sécurité
 add:keepassxc
