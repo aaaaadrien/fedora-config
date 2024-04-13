@@ -41,6 +41,7 @@ add:lm_sensors
 add:nvtop
 add:ncdu
 add:cronie
+add:mariadb
 
 # CLI : Disques
 add:nwipe
@@ -89,14 +90,14 @@ add:virt-viewer
 
 # GUI : Graphisme
 add:gimp
-add:flameshot
+del:flameshot
 
 # GUI : Reseau
 add:remmina
 del:anydesk
 
 # GUI : Internet
-del:epiphany
+add:epiphany
 add:evolution
 add:vivaldi-stable
 add:google-chrome-stable

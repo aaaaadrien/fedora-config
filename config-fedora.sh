@@ -102,7 +102,7 @@ refresh_cache()
 }
 refresh_cache_testing()
 {
-	dnf check-update --enablerepo=updates-testing fedora-release > /dev/null 2>&1
+	dnf check-update --enablerepo=*updates-testing fedora-release > /dev/null 2>&1
 }
 check_updates_rpm()
 {
@@ -110,7 +110,7 @@ check_updates_rpm()
 }
 check_updates_testing_rpm()
 {
-	yes n | dnf upgrade --enablerepo=updates-testing
+	yes n | dnf upgrade --enablerepo=*updates-testing
 }
 check_updates_flatpak()
 {
@@ -202,7 +202,7 @@ then
 	check_updates_testing_rpm
 
 	echo -e "\n \033[36mRAPPEL : Pas de MàJ testing gérée par le script ! Pour upgrader un paquet en testing : " 
-	echo -e "         dnf upgrade --enablerepo=updates-testing paquet1 paquet2 \033[0m \n"
+	echo -e "         dnf upgrade --enablerepo=*updates-testing paquet1 paquet2 \033[0m \n"
 
 	exit;
 fi
