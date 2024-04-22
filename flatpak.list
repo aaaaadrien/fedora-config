@@ -1,7 +1,18 @@
+# GUI : Multimedia
 add:com.github.marinm.songrec
-add:com.usebottles.bottles
-add:com.github.tchx84.Flatseal
+
+# GUI : Graphisme
+add:org.upscayl.Upscayl
+
+# GUI : Internet
 add:com.anydesk.Anydesk
 del:com.discordapp.Discord
 del:org.telegram.desktop
+
+# GUI : Utilitaires
+add:com.usebottles.bottles
+add:com.github.tchx84.Flatseal
+
+# GUI : Jeux
 add:com.valvesoftware.Steam
+
