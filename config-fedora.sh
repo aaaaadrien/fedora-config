@@ -98,7 +98,7 @@ add_copr()
 
 refresh_cache()
 {
-	dnf check-update fedora-release > /dev/null 2>&1
+	dnf check-update --refresh fedora-release > /dev/null 2>&1
 }
 refresh_cache_testing()
 {
@@ -234,6 +234,11 @@ then
         echo "deltarpm=false" >> /etc/dnf/dnf.conf
         check_cmd
 fi
+
+echo -n "- - - Refresh du cache : "
+refresh_cache
+check_cmd
+
 if ! check_pkg "dnf-utils"
 then
 	echo -n "- - - Installation dnf-utils : "
