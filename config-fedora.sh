@@ -150,6 +150,29 @@ ask_maj()
 ####################
 ### DEBUT SCRIPT ###
 ####################
+
+# Easter Egg
+if [[ "$1" = "cofee" ]]
+then
+	echo "Oui ce script fait aussi le café !"
+	echo ""
+	echo '    (  )   (   )  )'
+	echo '     ) (   )  (  ('
+	echo '     ( )  (    ) )'
+	echo '     _____________'
+	echo '    <_____________> ___'
+	echo '    |             |/ _ \'
+	echo '    |               | | |'
+	echo '    |               |_| |'
+	echo ' ___|             |\___/'
+	echo '/    \___________/    \'
+	echo '\_____________________/'
+	echo ""
+	echo "Impressionnant n'est ce pas !?"
+
+	exit 0;
+fi
+
 # Tester si root
 if [[ $(id -u) -ne "0" ]]
 then
