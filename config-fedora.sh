@@ -12,26 +12,6 @@ LOGFILE="/tmp/config-fedora.log"
 #####################
 
 
-####################
-### DEBUT SCRIPT ###
-####################
-# Tester si root
-if [[ $(id -u) -ne "0" ]]
-then
-	echo -e "\033[31mERREUR\033[0m Lancer le script avec les droits root (su - root ou sudo)"
-	exit 1;
-fi
-
-# Infos fichier log
-echo -e "\033[36m"
-echo "Pour suivre la progression des mises à jour : tail -f $LOGFILE"
-echo -e "\033[0m"
-
-# Date dans le log
-echo '-------------------' >> "$LOGFILE"
-date >> "$LOGFILE"
-
-
 #################
 ### FONCTIONS ###
 #################
@@ -165,6 +145,33 @@ ask_maj()
 #####################
 ### FIN FONCTIONS ###
 #####################
+
+
+####################
+### DEBUT SCRIPT ###
+####################
+# Tester si root
+if [[ $(id -u) -ne "0" ]]
+then
+	echo -e "\033[31mERREUR\033[0m Lancer le script avec les droits root (su - root ou sudo)"
+	exit 1;
+fi
+
+# Tester si bien Fedora Workstation
+if ! check_pkg fedora-release-workstation
+then
+	echo -e "\033[31mERREUR\033[0m Seule Fedora Workstation (GNOME) est supportée !"
+	exit 2;
+fi
+
+# Infos fichier log
+echo -e "\033[36m"
+echo "Pour suivre la progression des mises à jour : tail -f $LOGFILE"
+echo -e "\033[0m"
+
+# Date dans le log
+echo '-------------------' >> "$LOGFILE"
+date >> "$LOGFILE"
 
 
 #################

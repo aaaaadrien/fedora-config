@@ -90,6 +90,7 @@ add:virt-viewer
 
 # GUI : Graphisme
 add:gimp
+add:inkscape
 del:flameshot
 
 # GUI : Reseau
