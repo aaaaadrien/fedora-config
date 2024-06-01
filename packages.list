@@ -42,6 +42,7 @@ add:nvtop
 add:ncdu
 add:cronie
 add:mariadb
+add:nfs-utils
 
 # CLI : Disques
 add:nwipe

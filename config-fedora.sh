@@ -43,12 +43,12 @@ check_pkg()
 }
 add_pkg()
 {
-	dnf install -y --nogpgcheck "$1" > /dev/null
+	dnf install -y --nogpgcheck "$1" >> "$LOGFILE" 2>&1
 }
 
 del_pkg()
 {
-	dnf autoremove -y "$1" > /dev/null
+	dnf autoremove -y "$1" >> "$LOGFILE" 2>&1
 }
 swap_pkg()
 {
