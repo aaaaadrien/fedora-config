@@ -73,6 +73,7 @@ add:pv
 add:android-tools
 
 # GUI : Multimedia
+add:pavucontrol
 del:clementine
 add:strawberry
 add:smplayer
@@ -83,6 +84,7 @@ add:easytag
 del:peek
 add:obs-studio
 add:obs-studio-plugin-webkitgtk
+add:obs-studio-plugin-browser
 add:mediainfo-gui
 
 # GUI : Virtualisation
@@ -97,6 +99,7 @@ del:flameshot
 # GUI : Reseau
 add:remmina
 del:anydesk
+add:wireshark
 
 # GUI : Internet
 add:epiphany
@@ -113,3 +116,5 @@ add:guake
 # GUI : Sécurité
 add:keepassxc
 
+# GUI : Jeux
+add:dosbox-staging

@@ -151,8 +151,23 @@ ask_maj()
 ### DEBUT SCRIPT ###
 ####################
 
+# Verif option
+if [[ -z "$1" ]]
+then
+	echo "OK" > /dev/null
+elif [[ "$1" == "coffee" ]] || [[ "$1" == "check" ]] || [[ "$1" == "testing" ]]
+then
+	echo "OK" > /dev/null
+else
+	echo "Usage incorrect du script :"
+	echo "- $(basename $0)         : Lance la config et/ou les mises à jour"
+	echo "- $(basename $0) check   : Vérifie les mises à jour disponibles et propose de les lancer"
+	echo "- $(basename $0) testing : Vérifie les mises à jour disponibles en test"
+	exit 1;
+fi
+
 # Easter Egg
-if [[ "$1" = "cofee" ]]
+if [[ "$1" = "coffee" ]]
 then
 	echo "Oui ce script fait aussi le café !"
 	echo ""
