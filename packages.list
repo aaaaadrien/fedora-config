@@ -8,6 +8,16 @@ add:libreoffice-langpack-fr
 # Specifque Hardware
 add:amd-ucode-firmware
 
+# Admin SYS
+add:cockpit
+add:cockpit-bridge
+add:cockpit-networkmanager
+add:cockpit-pcp
+add:cockpit-selinux
+add:cockpit-storaged
+add:cockpit-system
+add:cockpit-ws
+
 # GNOME Apps
 add:seahorse
 add:gnome-tweaks
