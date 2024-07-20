@@ -42,6 +42,7 @@ add:ShellCheck
 # CLI : Système
 add:htop
 add:nmon
+add:dcfldd
 add:glances
 del:neofetch
 del:screenfetch
