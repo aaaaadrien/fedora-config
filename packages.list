@@ -81,6 +81,7 @@ add:yt-dlp
 add:git
 add:pv
 add:android-tools
+add:arm-image-installer
 
 # GUI : Multimedia
 add:pavucontrol

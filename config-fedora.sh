@@ -5,7 +5,6 @@
 #################
 RPMFUSIONCOMP="rpmfusion-free-appstream-data rpmfusion-nonfree-appstream-data rpmfusion-free-release-tainted rpmfusion-nonfree-release-tainted"
 CODEC="gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-good-extras gstreamer1-plugins-bad-free-extras gstreamer1-plugins-ugly-free gstreamer1-plugin-libav gstreamer1-plugins-ugly libdvdcss gstreamer1-plugin-openh264"
-GNOMECOMP="gnome-extensions-app gnome-shell-extension-dash-to-dock gnome-shell-extension-appindicator adwaita-qt5 adwaita-qt6 qgnomeplatform-qt5 qgnomeplatform-qt6"
 LOGFILE="/tmp/config-fedora.log"
 #####################
 ### FIN VARIABLES ###
@@ -428,15 +427,30 @@ done
 
 ### INSTALL OUTILS GNOME
 echo "08- Vérification composants GNOME"
-for p in $GNOMECOMP
+while read -r line
 do
-	if ! check_pkg "$p"
+	if [[ "$line" == add:* ]]
 	then
-		echo -n "- - - Installation composant GNOME $p : "
-		add_pkg "$p"
-		check_cmd
+		p=${line#add:}
+		if ! check_pkg "$p"
+		then
+			echo -n "- - - Installation composant GNOME $p : "
+			add_pkg "$p"
+			check_cmd
+		fi
 	fi
-done
+	
+	if [[ "$line" == del:* ]]
+	then
+		p=${line#del:}
+		if check_pkg "$p"
+		then
+			echo -n "- - - Suppression composant GNOME $p : "
+			del_pkg "$p"
+			check_cmd
+		fi
+	fi
+done < "$ICI/gnome.list"
 
 ### INSTALL/SUPPRESSION RPMS SELON LISTE
 echo "09- Gestion des paquets RPM"

@@ -15,6 +15,8 @@ Ma configuration de Fedora (base Fedora Workstation). Configure & Met à jour Fe
 ## Liste des fichiers
 
  **config-fedora.sh** : Script principal 
+ 
+ **gnome.list** : Fichier de paquets à ajouter ou retirer pour personnaliser GNOME (thèmes et extensions)
 
  **packages.list** : Fichier de paquets à ajouter ou retirer du système
 
@@ -23,7 +25,7 @@ Ma configuration de Fedora (base Fedora Workstation). Configure & Met à jour Fe
 
 ## Fonctionnement
 
-Les 3 fichiers mentionnés ci-dessus doivent être dans le même dossier.
+Les 4 fichiers mentionnés ci-dessus doivent être dans le même dossier.
 
 Exécuter avec les droits de super-utilisateur le scipt principal :
 
