@@ -6,6 +6,7 @@
 RPMFUSIONCOMP="rpmfusion-free-appstream-data rpmfusion-nonfree-appstream-data rpmfusion-free-release-tainted rpmfusion-nonfree-release-tainted"
 CODEC="gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-good-extras gstreamer1-plugins-bad-free-extras gstreamer1-plugins-ugly-free gstreamer1-plugin-libav gstreamer1-plugins-ugly libdvdcss gstreamer1-plugin-openh264"
 LOGFILE="/tmp/config-fedora.log"
+DNFVERSION="$(readlink $(which dnf))"
 #####################
 ### FIN VARIABLES ###
 #####################
@@ -47,7 +48,14 @@ add_pkg()
 
 del_pkg()
 {
-	dnf autoremove -y "$1" >> "$LOGFILE" 2>&1
+	if [[ "${DNFVERSION}" == "dnf-3" ]]
+	then
+		dnf autoremove -y "$1" >> "$LOGFILE" 2>&1
+	fi
+	if [[ "${DNFVERSION}" == "dnf5" ]]
+	then
+		dnf remove -y "$1" >> "$LOGFILE" 2>&1
+	fi
 }
 swap_pkg()
 {
@@ -67,7 +75,14 @@ del_flatpak()
 }
 check_copr()
 {
-	COPR_ENABLED=$(dnf copr list --enabled | grep -c "$1")
+	if [[ ${DNFVERSION} == "dnf-3" ]]
+	then
+		COPR_ENABLED=$(dnf copr list --enabled | grep -c "$1")
+	fi
+	if [[ ${DNFVERSION} == "dnf5" ]]
+	then
+		COPR_ENABLED=$(dnf copr list | grep -v '(disabled)' | grep -c "$1")
+	fi
 	return $COPR_ENABLED
 }
 add_copr()
@@ -97,7 +112,14 @@ check_updates_flatpak()
 }
 need_reboot()
 {
-	needs-restarting -r >> "$LOGFILE" 2>&1
+	if [[ ${DNFVERSION} == "dnf-3" ]]
+	then
+		needs-restarting -r >> "$LOGFILE" 2>&1
+	fi
+	if [[ ${DNFVERSION} == "dnf5" ]]
+	then
+		dnf needs-restarting -r >> "$LOGFILE" 2>&1
+	fi
 }
 ask_reboot()
 {
@@ -154,14 +176,15 @@ ask_maj()
 if [[ -z "$1" ]]
 then
 	echo "OK" > /dev/null
-elif [[ "$1" == "coffee" ]] || [[ "$1" == "check" ]] || [[ "$1" == "testing" ]]
+elif [[ "$1" == "coffee" ]] || [[ "$1" == "check" ]] || [[ "$1" == "testing" ]] || [[ "$1" == "scriptupdate" ]]
 then
 	echo "OK" > /dev/null
 else
 	echo "Usage incorrect du script :"
-	echo "- $(basename $0)         : Lance la config et/ou les mises à jour"
-	echo "- $(basename $0) check   : Vérifie les mises à jour disponibles et propose de les lancer"
-	echo "- $(basename $0) testing : Vérifie les mises à jour disponibles en test"
+	echo "- $(basename $0)              : Lance la config et/ou les mises à jour"
+	echo "- $(basename $0) check        : Vérifie les mises à jour disponibles et propose de les lancer"
+	echo "- $(basename $0) testing      : Vérifie les mises à jour disponibles en test"
+	echo "- $(basename $0) scriptupdate : Met à jour le script depuis Github"
 	exit 1;
 fi
 
@@ -183,6 +206,18 @@ then
 	echo '\_____________________/'
 	echo ""
 	echo "Impressionnant n'est ce pas !?"
+
+	exit 0;
+fi
+
+# Script Update
+if [[ "$1" = "scriptupdate" ]]
+then
+	echo $0
+	wget -O- https://raw.githubusercontent.com/aaaaadrien/fedora-config/refs/heads/main/config-fedora.sh > "$0"
+	chmod +x "$0"
+
+	wget -O- -q https://raw.githubusercontent.com/aaaaadrien/fedora-config/refs/heads/main/CHANGELOG.txt
 
 	exit 0;
 fi

@@ -1,0 +1,5 @@
+CHANGELOG : 
+
+2024-09-25 :
+Compatibilité ajoutée avec dnf5 pour Fedora41.
+Ajout de l'option scriptupdate pour mettre à jour le script depuis lui même.
