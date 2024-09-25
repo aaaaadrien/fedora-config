@@ -213,11 +213,14 @@ fi
 # Script Update
 if [[ "$1" = "scriptupdate" ]]
 then
-	echo $0
-	wget -O- https://raw.githubusercontent.com/aaaaadrien/fedora-config/refs/heads/main/config-fedora.sh > "$0"
+	echo "Mise à jour $0 via https://github.com/aaaaadrien/fedora-config"
+	wget -O- -q https://raw.githubusercontent.com/aaaaadrien/fedora-config/refs/heads/main/config-fedora.sh > "$0"
 	chmod +x "$0"
 
+	echo "CHANGELOG selon les dernières infos sur Github :"
+	echo -e "\033[36m"
 	wget -O- -q https://raw.githubusercontent.com/aaaaadrien/fedora-config/refs/heads/main/CHANGELOG.txt
+	echo -e "\033[0m"
 
 	exit 0;
 fi
