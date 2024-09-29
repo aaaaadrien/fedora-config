@@ -115,11 +115,14 @@ need_reboot()
 	if [[ ${DNFVERSION} == "dnf-3" ]]
 	then
 		needs-restarting -r >> "$LOGFILE" 2>&1
+		NEEDRESTART="$?"
 	fi
 	if [[ ${DNFVERSION} == "dnf5" ]]
 	then
 		dnf needs-restarting -r >> "$LOGFILE" 2>&1
+		NEEDRESTART="$?"
 	fi
+	return $NEEDRESTART
 }
 ask_reboot()
 {
@@ -213,14 +216,11 @@ fi
 # Script Update
 if [[ "$1" = "scriptupdate" ]]
 then
-	echo "Mise à jour $0 via https://github.com/aaaaadrien/fedora-config"
+	echo $0
 	wget -O- https://raw.githubusercontent.com/aaaaadrien/fedora-config/refs/heads/main/config-fedora.sh > "$0"
 	chmod +x "$0"
 
-	echo "CHANGELOG selon les dernières infos sur Github :"
-	echo -e "\033[36m"
-	wget -O- -q https://raw.githubusercontent.com/aaaaadrien/fedora-config/refs/heads/main/CHANGELOG.txt
-	echo -e "\033[0m"
+	wget -O- -q https://raw.githubusercontent.com/aaaaadrien/fedora-config/refs/heads/main/CHANGELOG.txt | head
 
 	exit 0;
 fi
