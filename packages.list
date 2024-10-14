@@ -12,7 +12,6 @@ add:amd-ucode-firmware
 add:cockpit
 add:cockpit-bridge
 add:cockpit-networkmanager
-add:cockpit-pcp
 add:cockpit-selinux
 add:cockpit-storaged
 add:cockpit-system
