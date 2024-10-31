@@ -7,6 +7,8 @@ RPMFUSIONCOMP="rpmfusion-free-appstream-data rpmfusion-nonfree-appstream-data rp
 CODEC="gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-good-extras gstreamer1-plugins-bad-free-extras gstreamer1-plugins-ugly-free gstreamer1-plugin-libav gstreamer1-plugins-ugly libdvdcss gstreamer1-plugin-openh264"
 LOGFILE="/tmp/config-fedora.log"
 DNFVERSION="$(readlink $(which dnf))"
+FC0=$(rpm -E %fedora)
+FC1=$(($FC0 + 1))
 #####################
 ### FIN VARIABLES ###
 #####################
@@ -166,6 +168,25 @@ ask_maj()
 	fi
 
 }
+
+upgrade_fc()
+{
+	if curl --fail -s --output /dev/null https://dl.fedoraproject.org/pub/fedora/linux/releases/$FC1
+	then
+		echo "Lancement de l'upgrade $FC0 -> $FC1"
+		if dnf system-upgrade --releasever=$FC1 download
+		then
+			dnf system-upgrade reboot
+		else
+			echo -e "\033[31mERREUR lors de la phase préparatoire. Abandon! \033[0m"
+			exit 3;
+		fi
+	else
+		echo -e "\033[33mLa version $FC1 n'est pas notée stable. Abandon! \033[0m"
+		exit 4;
+	fi
+}
+
 #####################
 ### FIN FONCTIONS ###
 #####################
@@ -179,7 +200,7 @@ ask_maj()
 if [[ -z "$1" ]]
 then
 	echo "OK" > /dev/null
-elif [[ "$1" == "coffee" ]] || [[ "$1" == "check" ]] || [[ "$1" == "testing" ]] || [[ "$1" == "scriptupdate" ]]
+elif [[ "$1" == "coffee" ]] || [[ "$1" == "check" ]] || [[ "$1" == "testing" ]] || [[ "$1" == "upgrade" ]] || [[ "$1" == "scriptupdate" ]]
 then
 	echo "OK" > /dev/null
 else
@@ -187,6 +208,7 @@ else
 	echo "- $(basename $0)              : Lance la config et/ou les mises à jour"
 	echo "- $(basename $0) check        : Vérifie les mises à jour disponibles et propose de les lancer"
 	echo "- $(basename $0) testing      : Vérifie les mises à jour disponibles en test"
+	echo "- $(basename $0) upgrade      : Lance la mise à niveau de Fedora vers la version suivante"
 	echo "- $(basename $0) scriptupdate : Met à jour le script depuis Github"
 	exit 1;
 fi
@@ -211,6 +233,12 @@ then
 	echo "Impressionnant n'est ce pas !?"
 
 	exit 0;
+fi
+
+# Upgrade Fedora
+if [[ "$1" = "upgrade" ]]
+then
+	upgrade_fc
 fi
 
 # Script Update
