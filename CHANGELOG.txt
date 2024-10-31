@@ -1,3 +1,6 @@
+2024-10-31 :
+Ajout de l'option upgrade pour mettre à niveau vers la version suivante de Fedora si elle existe et est stable.
+
 2024-09-29 :
 Correction du reboot si nécessaire qui ne fonctionnait plus
 
