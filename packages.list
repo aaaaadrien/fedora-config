@@ -92,14 +92,14 @@ add:kdenlive
 add:audacity
 add:easytag
 del:peek
-add:obs-studio
-add:obs-studio-plugin-webkitgtk
-add:obs-studio-plugin-browser
+del:obs-studio
+del:obs-studio-plugin-webkitgtk
+del:obs-studio-plugin-browser
 add:mediainfo-gui
 
 # GUI : Virtualisation
 add:VirtualBox
-add:virt-viewer
+del:virt-viewer
 
 # GUI : Graphisme
 add:gimp
