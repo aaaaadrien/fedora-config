@@ -18,12 +18,14 @@ add:cockpit-system
 add:cockpit-ws
 
 # GNOME Apps
+add:ptyxis
 add:seahorse
 add:gnome-tweaks
 add:file-roller
 add:dconf-editor
 del:gnome-boxes
 del:abrt
+del:gnome-terminal
 
 # CLI : Console
 add:screen
