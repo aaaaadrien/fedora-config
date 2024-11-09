@@ -118,7 +118,7 @@ add:epiphany
 add:evolution
 add:vivaldi-stable
 add:google-chrome-stable
-add:telegram-desktop
+del:telegram-desktop
 add:discord
 
 # GUI : Utilitaires

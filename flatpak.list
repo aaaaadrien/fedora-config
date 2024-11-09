@@ -8,7 +8,7 @@ add:org.upscayl.Upscayl
 # GUI : Internet
 add:com.anydesk.Anydesk
 del:com.discordapp.Discord
-del:org.telegram.desktop
+add:org.telegram.desktop
 
 # GUI : Utilitaires
 add:com.usebottles.bottles
