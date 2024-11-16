@@ -16,6 +16,7 @@ add:cockpit-selinux
 add:cockpit-storaged
 add:cockpit-system
 add:cockpit-ws
+add:cockpit-podman
 
 # GNOME Apps
 add:ptyxis
@@ -36,6 +37,10 @@ add:git
 add:koji
 add:python3-fedora
 add:libtirpc-devel
+
+# CLI : devops
+add:podman
+add:podman-tui
 
 # CLI : Scripting
 add:ShellCheck
