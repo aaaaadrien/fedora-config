@@ -41,6 +41,8 @@ add:libtirpc-devel
 # CLI : devops
 add:podman
 add:podman-tui
+add:toolbox
+add:toolbox-extra-tools
 
 # CLI : Scripting
 add:ShellCheck
