@@ -17,6 +17,7 @@ add:cockpit-storaged
 add:cockpit-system
 add:cockpit-ws
 add:cockpit-podman
+add:cockpit-machines
 
 # GNOME Apps
 add:ptyxis
@@ -24,7 +25,6 @@ add:seahorse
 add:gnome-tweaks
 add:file-roller
 add:dconf-editor
-add:gnome-boxes
 del:abrt
 del:gnome-terminal
 
