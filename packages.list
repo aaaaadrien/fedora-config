@@ -24,7 +24,7 @@ add:seahorse
 add:gnome-tweaks
 add:file-roller
 add:dconf-editor
-del:gnome-boxes
+add:gnome-boxes
 del:abrt
 del:gnome-terminal
 
@@ -108,6 +108,7 @@ add:mediainfo-gui
 
 # GUI : Virtualisation
 add:VirtualBox
+add:virt-manager
 del:virt-viewer
 
 # GUI : Graphisme
