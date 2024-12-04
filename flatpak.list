@@ -16,6 +16,7 @@ add:com.github.tchx84.Flatseal
 
 # GUI : Jeux
 add:com.valvesoftware.Steam
+add:com.github.k4zmu2a.spacecadetpinball
 
 # GUI : Virtualisation
 add:org.virt_manager.virt-viewer
