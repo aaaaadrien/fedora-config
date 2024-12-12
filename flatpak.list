@@ -20,3 +20,6 @@ add:com.github.k4zmu2a.spacecadetpinball
 
 # GUI : Virtualisation
 add:org.virt_manager.virt-viewer
+
+# GUI : Admin système
+add:io.dbeaver.DBeaverCommunity

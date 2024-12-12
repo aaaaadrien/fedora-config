@@ -19,6 +19,14 @@ add:cockpit-ws
 add:cockpit-podman
 add:cockpit-machines
 
+# Fonts
+add:redhat-text-vf-fonts
+add:redhat-text-fonts
+add:redhat-mono-vf-fonts
+add:redhat-mono-fonts
+add:redhat-display-vf-fonts
+add:redhat-display-fonts
+
 # GNOME Apps
 add:ptyxis
 add:seahorse
@@ -119,7 +127,7 @@ del:flameshot
 # GUI : Reseau
 add:remmina
 del:anydesk
-add:wireshark
+add:gqrx
 
 # GUI : Internet
 add:epiphany
@@ -138,3 +146,6 @@ add:keepassxc
 
 # GUI : Jeux
 add:dosbox-staging
+
+# GUI : Admin Systeme
+add:wireshark
