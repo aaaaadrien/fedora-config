@@ -433,6 +433,20 @@ then
 	sed -e 's/\t//g' -i /etc/yum.repos.d/google-chrome.repo
 fi
 
+## MICROSOFT
+if ! check_repo_file microsoft-prod.repo
+then
+	echo -n "- - - Installation Microsoft Prod Repo : "
+	echo "[packages-microsoft-com-pro]
+	name=Microsoft Production
+	baseurl=https://packages.microsoft.com/rhel/9/prod/
+	enabled=1
+	gpgcheck=1
+	gpgkey=https://packages.microsoft.com/keys/microsoft.asc" 2>/dev/null > /etc/yum.repos.d/microsoft-prod.repo
+	check_cmd
+	sed -e 's/\t//g' -i /etc/yum.repos.d/microsoft-prod.repo
+fi
+
 ## FLATHUB
 if [[ $(flatpak remotes | grep -c flathub) -ne 1 ]]
 then
