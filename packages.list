@@ -5,6 +5,9 @@
 add:aspell-fr
 add:libreoffice-langpack-fr
 
+# Intégration APPS KDE
+add:plasma-breeze
+
 # Specifque Hardware
 add:amd-ucode-firmware
 
