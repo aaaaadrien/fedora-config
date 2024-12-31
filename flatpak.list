@@ -11,7 +11,7 @@ del:com.discordapp.Discord
 add:org.telegram.desktop
 
 # GUI : Utilitaires
-add:com.usebottles.bottles
+del:com.usebottles.bottles
 add:com.github.tchx84.Flatseal
 
 # GUI : Jeux
