@@ -118,6 +118,7 @@ del:obs-studio
 del:obs-studio-plugin-webkitgtk
 del:obs-studio-plugin-browser
 add:mediainfo-gui
+add:HandBrake-gui
 
 # GUI : Virtualisation
 add:VirtualBox
