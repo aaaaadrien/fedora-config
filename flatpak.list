@@ -15,7 +15,7 @@ del:com.usebottles.bottles
 add:com.github.tchx84.Flatseal
 
 # GUI : Jeux
-add:com.valvesoftware.Steam
+del:com.valvesoftware.Steam
 add:com.github.k4zmu2a.spacecadetpinball
 
 # GUI : Virtualisation

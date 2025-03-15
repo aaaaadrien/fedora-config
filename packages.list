@@ -152,6 +152,7 @@ add:keepassxc
 
 # GUI : Jeux
 add:dosbox-staging
+add:steam
 
 # GUI : Admin Systeme
 add:wireshark
