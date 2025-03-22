@@ -38,6 +38,8 @@ add:file-roller
 add:dconf-editor
 del:abrt
 del:gnome-terminal
+add:evolution
+add:evolution-ews
 
 # CLI : Console
 add:screen
@@ -153,6 +155,7 @@ add:keepassxc
 # GUI : Jeux
 add:dosbox-staging
 add:steam
+add:goverlay
 
 # GUI : Admin Systeme
 add:wireshark
