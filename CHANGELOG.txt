@@ -1,3 +1,6 @@
+2025-03-22 :
+Ajout de l'option upgrade beta pour mettre à niveau vers la version beta suivante de Fedora si elle existe.
+
 2024-10-31 :
 Ajout de l'option upgrade pour mettre à niveau vers la version suivante de Fedora si elle existe et est stable.
 
