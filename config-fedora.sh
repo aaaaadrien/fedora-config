@@ -171,7 +171,13 @@ ask_maj()
 
 upgrade_fc()
 {
-	if curl --fail -s --output /dev/null https://dl.fedoraproject.org/pub/fedora/linux/releases/$FC1
+	CHECKFCRELEASE="https://dl.fedoraproject.org/pub/fedora/linux/releases"
+	if [[ "$2" = "beta" ]]
+	then
+		CHECKFCRELEASE="https://dl.fedoraproject.org/pub/fedora/linux/development"
+	fi
+
+	if curl --fail -s --output /dev/null $CHECKFCRELEASE/$FC1
 	then
 		echo "Lancement de l'upgrade $FC0 -> $FC1"
 		if dnf system-upgrade --releasever=$FC1 download
