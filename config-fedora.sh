@@ -172,7 +172,7 @@ ask_maj()
 upgrade_fc()
 {
 	CHECKFCRELEASE="https://dl.fedoraproject.org/pub/fedora/linux/releases"
-	if [[ "$2" = "beta" ]]
+	if [[ "$1" = "beta" ]]
 	then
 		CHECKFCRELEASE="https://dl.fedoraproject.org/pub/fedora/linux/development"
 	fi
@@ -244,7 +244,7 @@ fi
 # Upgrade Fedora
 if [[ "$1" = "upgrade" ]]
 then
-	upgrade_fc
+	upgrade_fc $2
 fi
 
 # Script Update
