@@ -1,3 +1,6 @@
+2025-04-05 :
+Ajout de l'option offline pour appliquer les MàJ au reboot de la machine en mode hors ligne.
+
 2025-03-22 :
 Ajout de l'option upgrade beta pour mettre à niveau vers la version beta suivante de Fedora si elle existe.
 

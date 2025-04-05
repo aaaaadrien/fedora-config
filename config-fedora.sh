@@ -158,7 +158,7 @@ kexec_reboot()
 
 ask_maj()
 {
-	echo -n -e "\n\033[36mVoulez-vous lancer les MàJ maintenant ? [y/N] : \033[0m"
+	echo -n -e "\n\033[36mVoulez-vous lancer les MàJ maintenant ? [y/offline/N] : \033[0m"
 	read startupdate
 	startupdate=${startupdate:-n}
 	echo ""
@@ -166,7 +166,28 @@ ask_maj()
 	then
 		bash "$0"
 	fi
+	if [[ ${startupdate,,} == "offline" ]]
+	then
+		bash "$0" offline
+	fi
+}
 
+offline_dl()
+{
+	dnf upgrade --offline > /dev/null 2>&1
+}
+
+offline_ask()
+{
+	echo -n -e "\n\033[36mVoulez-vous rebooter pour appliquer les MàJ maintenant ? [y/N] : \033[0m"
+	read offlineupgrade
+	offlineupgrade=${offlineupgrade:-n}
+	if [[ ${offlineupgrade,,} == "y" ]]
+	then
+		dnf offline reboot
+	else
+		echo -n -e "\n\033[33mPour appliquer les MàJ plus tard : dnf offline reboot\033[0m \n"
+	fi	
 }
 
 upgrade_fc()
@@ -206,16 +227,17 @@ upgrade_fc()
 if [[ -z "$1" ]]
 then
 	echo "OK" > /dev/null
-elif [[ "$1" == "coffee" ]] || [[ "$1" == "check" ]] || [[ "$1" == "testing" ]] || [[ "$1" == "upgrade" ]] || [[ "$1" == "scriptupdate" ]]
+elif [[ "$1" == "coffee" ]] || [[ "$1" == "check" ]] || [[ "$1" == "testing" ]] || [[ "$1" == "upgrade" ]] || [[ "$1" == "scriptupdate" ]] || [[ "$1" == "offline" ]]
 then
 	echo "OK" > /dev/null
 else
 	echo "Usage incorrect du script :"
-	echo "- $(basename $0)              : Lance la config et/ou les mises à jour"
-	echo "- $(basename $0) check        : Vérifie les mises à jour disponibles et propose de les lancer"
-	echo "- $(basename $0) testing      : Vérifie les mises à jour disponibles en test"
-	echo "- $(basename $0) upgrade      : Lance la mise à niveau de Fedora vers la version suivante"
-	echo "- $(basename $0) scriptupdate : Met à jour le script depuis Github"
+	echo "- $(basename $0)                : Lance la config et/ou les mises à jour"
+	echo "- $(basename $0) check          : Vérifie les mises à jour disponibles et propose de les lancer"
+	echo "- $(basename $0) testing        : Vérifie les mises à jour disponibles en test"
+	echo "- $(basename $0) upgrade        : Lance la mise à niveau de Fedora vers la version suivante"
+	echo "- $(basename $0) offline        : Met à jour les RPM en mode offline"
+	echo "- $(basename $0) scriptupdate   : Met à jour le script depuis Github"
 	exit 1;
 fi
 
@@ -323,6 +345,21 @@ then
 	exit;
 fi
 
+## CAS OFFLINE UPGRADE
+if [[ "$1" = "offline" ]]
+then
+	echo -n "01- - Refresh du cache : "
+	refresh_cache
+	check_cmd
+
+	echo -n "02- - Téléchargement des RPM Pour MàJ Offline : "
+	offline_dl
+	check_cmd
+
+	offline_ask
+
+	exit;
+fi
 
 ### CONF DNF
 echo "01- Vérification configuration DNF"
