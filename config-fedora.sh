@@ -174,7 +174,7 @@ ask_maj()
 
 offline_dl()
 {
-	dnf upgrade --offline > /dev/null 2>&1
+	dnf upgrade --offline >> "$LOGFILE" 2>&1
 }
 
 offline_ask()
