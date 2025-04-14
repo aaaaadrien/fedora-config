@@ -179,15 +179,21 @@ offline_dl()
 
 offline_ask()
 {
-	echo -n -e "\n\033[36mVoulez-vous rebooter pour appliquer les MàJ maintenant ? [y/N] : \033[0m"
+	echo -n -e "\n\033[36mVoulez-vous rebooter (r) ou arrêter (s) pour appliquer les MàJ maintenant ? [r/s/N] : \033[0m"
 	read offlineupgrade
 	offlineupgrade=${offlineupgrade:-n}
-	if [[ ${offlineupgrade,,} == "y" ]]
+	if [[ ${offlineupgrade,,} == "r" ]]
 	then
 		dnf offline reboot
-	else
-		echo -n -e "\n\033[33mPour appliquer les MàJ plus tard : dnf offline reboot\033[0m \n"
-	fi	
+		exit
+	fi
+	if [[ ${offlineupgrade,,} == "s" ]]
+	then
+		dnf offline reboot --poweroff
+		exit
+	fi
+
+	echo -n -e "\n\033[33mPour appliquer les MàJ plus tard : dnf offline reboot\033[0m \n"
 }
 
 upgrade_fc()
