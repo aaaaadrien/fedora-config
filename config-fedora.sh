@@ -648,7 +648,7 @@ fi
 if [[ $(grep -c 'vm.swappiness' "$SYSCTLFIC") -lt 1 ]]
 then
 	echo -n "- - - Définition du swapiness à 10 : "
-	echo "vm.swappiness = 10" >> "$SYSCTLFIC"
+	echo "vm.swappiness = 2" >> "$SYSCTLFIC"
 	check_cmd
 fi
 if [[ $(grep -c 'kernel.sysrq' "$SYSCTLFIC") -lt 1 ]]
