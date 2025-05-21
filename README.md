@@ -3,10 +3,16 @@ My fedora config (from Fedora Workstation). Configure & Update Fedora
 
 **Works only with Fedora Workstation with GNOME desktop environment.**
 
+*Works with Enterprise Linux, auto detection added (RHEL et Alma Linux)*
+
+-----
 
 Ma configuration de Fedora (base Fedora Workstation). Configure & Met à jour Fedora
 
 **Ne fonctionne qu'avec Fedora Workstation disposant de l'environnement de bureau GNOME.**
+
+*Fonctionne avec Entreprise Linux, détection auto ajoutée (RHEL et Alma Linux)*
+
 
 
 
@@ -16,11 +22,15 @@ Ma configuration de Fedora (base Fedora Workstation). Configure & Met à jour Fe
 
  **config-fedora.sh** : Script principal 
  
- **gnome.list** : Fichier de paquets à ajouter ou retirer pour personnaliser GNOME (thèmes et extensions)
+ **reposextra-fc.list** : Fichier permettant d'installer des repos supplémentaires
 
- **packages.list** : Fichier de paquets à ajouter ou retirer du système
+ **gnome-fc.list** : Fichier de paquets à ajouter ou retirer pour personnaliser GNOME (thèmes et extensions)
 
- **flatpak.list** : Fichier de flatpak à ajouter ou retirer du système
+ **packages-fc.list** : Fichier de paquets à ajouter ou retirer du système
+
+ **flatpak-fc.list** : Fichier de flatpak à ajouter ou retirer du système
+
+*Il existe les mêmes fichiers avec "-el" utilisés pour Enterprise Linux*
 
 
 ## Fonctionnement
@@ -29,7 +39,7 @@ Les 4 fichiers mentionnés ci-dessus doivent être dans le même dossier.
 
 Exécuter avec les droits de super-utilisateur le scipt principal :
 
-    ./config-fedora.sh
+    ./config.sh
 
 Celui-ci peut être exécuté plusieurs fois de suite. Si des étapes sont déjà configurées, elles ne le seront pas à nouveau. De fait, le script peut être utilisé pour : 
 
@@ -39,12 +49,12 @@ Celui-ci peut être exécuté plusieurs fois de suite. Si des étapes sont déj�
 
 Il est possible de faire uniquement une vérification des mises à jour (listing des paquets et flatpak à mettre à jour sans appliquer de modifications) via l'option check : 
 
-    ./config-fedora.sh check
+    ./config.sh check
 
 
-Il est possible d'avoir un aperçu des mises à jour disponibles dans les dépôts "testing" via l'option testing : 
+Il est possible d'avoir un aperçu des mises à jour disponibles dans les dépôts "testing" via l'option testing (Dispo uniquement pour Fedora) : 
 
-    ./config-fedora.sh testing
+    ./config.sh testing
 
 
 

@@ -1,0 +1,11 @@
+# CoDec
+add:gstreamer1-plugins-base
+add:gstreamer1-plugins-good
+add:gstreamer1-plugins-bad-free
+add:gstreamer1-plugins-good-extras
+add:gstreamer1-plugins-bad-free-extras
+add:gstreamer1-plugins-ugly-free
+add:gstreamer1-plugin-libav
+add:gstreamer1-plugins-ugly
+add:libdvdcss
+add:gstreamer1-plugin-openh264

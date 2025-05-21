@@ -4,11 +4,113 @@
 ### VARIABLES ###
 #################
 RPMFUSIONCOMP="rpmfusion-free-appstream-data rpmfusion-nonfree-appstream-data rpmfusion-free-release-tainted rpmfusion-nonfree-release-tainted"
-CODEC="gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-good-extras gstreamer1-plugins-bad-free-extras gstreamer1-plugins-ugly-free gstreamer1-plugin-libav gstreamer1-plugins-ugly libdvdcss gstreamer1-plugin-openh264"
-LOGFILE="/tmp/config-fedora.log"
+
+# Fichier de log
+LOGFILE="/tmp/config-progress.log"
+
+# Détection DNF version
 DNFVERSION="$(readlink $(which dnf))"
+
+# Version FEDORA
 FC0=$(rpm -E %fedora)
-FC1=$(($FC0 + 1))
+
+# Version Enterprise Linux
+EL0=$(rpm -E %{rhel})
+
+# Version RHEL
+RH0=$(rpm -E %{rhel})
+
+# Version Alma Linux
+AL0=$(rpm -E %{?almalinux})
+
+# Détection Fedora
+if [[ $FC0 =~ ^[0-9]+$ ]]
+then
+    ISFC=1
+else
+    ISFC=0
+fi
+
+# Détection Enterprise Linux
+if [[ $EL0 =~ ^[0-9]+$ ]]
+then
+    ISEL=1
+else
+    ISEL=0
+fi
+
+# Détection RHEL
+if [[ $RH0 =~ ^[0-9]+$ && -z $AL0 ]]
+then
+    ISRH=1
+else
+    ISRH=0
+fi
+
+# Détection Alma Linux
+if [[ $AL0 =~ ^[0-9]+$ ]]
+then
+    ISAL=1
+else
+    ISAL=0
+fi
+
+# Version Fedora suivante 
+if [[ $ISFC -eq 1 ]]
+then
+	FC1=$(($FC0 + 1))
+fi
+
+# Définition du fichier reposextra.list
+if [[ $ISFC -eq 1 ]]
+then
+	RPELIST="reposextra-fc.list"
+fi
+if [[ $ISEL -eq 1 ]]
+then
+	RPELIST="reposextra-el.list"
+fi
+
+# Définition du fichier codec.list
+if [[ $ISFC -eq 1 ]]
+then
+	CDCLIST="codec-fc.list"
+fi
+if [[ $ISEL -eq 1 ]]
+then
+	CDCLIST="codec-el.list"
+fi
+
+# Définition du fichier packages.list
+if [[ $ISFC -eq 1 ]]
+then
+	PKGLIST="packages-fc.list"
+fi
+if [[ $ISEL -eq 1 ]]
+then
+	PKGLIST="packages-el.list"
+fi
+
+# Définition du fichier flatpak.list
+if [[ $ISFC -eq 1 ]]
+then
+	FPKLIST="flatpak-fc.list"
+fi
+if [[ $ISEL -eq 1 ]]
+then
+	FPKLIST="flatpak-el.list"
+fi
+
+# Définition du fichier gnome.list
+if [[ $ISFC -eq 1 ]]
+then
+	GNMLIST="gnome-fc.list"
+fi
+if [[ $ISEL -eq 1 ]]
+then
+	GNMLIST="gnome-el.list"
+fi
+
 #####################
 ### FIN VARIABLES ###
 #####################
@@ -28,7 +130,15 @@ else
 fi
 }
 
-
+check_repo_dnf()
+{
+	if [[ $(dnf repolist | grep -c $1) -eq 0 ]]
+	then
+		return 1
+	else
+		return 0
+	fi
+}
 check_repo_file()
 {
 	if [[ -e "/etc/yum.repos.d/$1" ]]
@@ -38,7 +148,10 @@ check_repo_file()
 		return 1
 	fi
 }
-
+enable_repo()
+{
+	dnf config-manager --set-enabled "$1" > /dev/null
+}
 check_pkg()
 {
 	rpm -q "$1" > /dev/null
@@ -94,11 +207,11 @@ add_copr()
 
 refresh_cache()
 {
-	dnf check-update --refresh fedora-release > /dev/null 2>&1
+	dnf check-update --refresh systemd > /dev/null 2>&1
 }
 refresh_cache_testing()
 {
-	dnf check-update --enablerepo=*updates-testing fedora-release > /dev/null 2>&1
+	dnf check-update --enablerepo=*updates-testing systemd > /dev/null 2>&1
 }
 check_updates_rpm()
 {
@@ -240,7 +353,7 @@ else
 	echo "Usage incorrect du script :"
 	echo "- $(basename $0)                : Lance la config et/ou les mises à jour"
 	echo "- $(basename $0) check          : Vérifie les mises à jour disponibles et propose de les lancer"
-	echo "- $(basename $0) testing        : Vérifie les mises à jour disponibles en test"
+	echo "- $(basename $0) testing        : Vérifie les mises à jour disponibles en test (Fedora uniquement)"
 	echo "- $(basename $0) upgrade        : Lance la mise à niveau de Fedora vers la version suivante"
 	echo "- $(basename $0) offline        : Met à jour les RPM en mode offline"
 	echo "- $(basename $0) scriptupdate   : Met à jour le script depuis Github"
@@ -272,7 +385,13 @@ fi
 # Upgrade Fedora
 if [[ "$1" = "upgrade" ]]
 then
-	upgrade_fc $2
+	if [[ $ISFC -eq 1 ]]
+	then
+		upgrade_fc $2
+	else
+		echo -e "\033[31mERREUR\033[0m Fedora non détectée"
+		exit 1;
+	fi
 fi
 
 # Script Update
@@ -295,11 +414,15 @@ then
 fi
 
 # Tester si bien Fedora Workstation
-if ! check_pkg fedora-release-workstation
+if [[ $ISFC -eq 1 ]]
 then
-	echo -e "\033[31mERREUR\033[0m Seule Fedora Workstation (GNOME) est supportée !"
-	exit 2;
+	if ! check_pkg fedora-release-workstation
+	then
+		echo -e "\033[31mERREUR\033[0m Seule Fedora Workstation (GNOME) est supportée !"
+		exit 2;
+	fi
 fi
+
 
 # Infos fichier log
 echo -e "\033[36m"
@@ -336,7 +459,7 @@ then
 fi
 
 ## CAS CHECK-UPDATES-TESTING
-if [[ "$1" = "testing" ]]
+if [[ "$1" == "testing" && $ISFC -eq 1 ]]
 then
 	echo -n "01- - Refresh du cache : "
 	refresh_cache_testing
@@ -369,13 +492,6 @@ fi
 
 ### CONF DNF
 echo "01- Vérification configuration DNF"
-# plus necessaire avec dnf5, option non prise en compte
-#if [[ $(grep -c 'fastestmirror=' /etc/dnf/dnf.conf) -lt 1 ]]
-#then
-#	echo -n "- - - Correction miroirs rapides : "
-#	echo "fastestmirror=true" >> /etc/dnf/dnf.conf
-#	check_cmd
-#fi
 if [[ $(grep -c 'max_parallel_downloads=' /etc/dnf/dnf.conf) -lt 1 ]]
 then
 	echo -n "- - - Correction téléchargements parallèles : "
@@ -399,13 +515,24 @@ echo -n "- - - Refresh du cache : "
 refresh_cache
 check_cmd
 
-if ! check_pkg "dnf-utils"
+if [[ $ISFC -eq 1 ]]
 then
-	echo -n "- - - Installation dnf-utils : "
-	add_pkg "dnf-utils"
-	check_cmd
+	if ! check_pkg "dnf-utils"
+	then
+		echo -n "- - - Installation dnf-utils : "
+		add_pkg "dnf-utils"
+		check_cmd
+	fi
 fi
-
+if [[ $ISEL -eq 1 ]]
+then
+	if ! check_pkg "yum-utils"
+	then
+		echo -n "- - - Installation yum-utils : "
+		add_pkg "yum-utils"
+		check_cmd
+	fi
+fi
 
 ### MAJ RPM
 echo -n "02- Mise à jour du système DNF : "
@@ -424,76 +551,157 @@ then
 	ask_reboot
 fi
 
-
 ### CONFIG DEPOTS
 echo "04- Vérification configuration des dépôts"
-## COPR PERSO
-if check_copr 'adriend/fedora-apps'
+## EPEL
+if [[ $ISEL -eq 1 ]]
 then
-	echo -n "- - - Activation COPR adriend/fedora-apps : "
-	add_copr "adriend/fedora-apps"
-	check_cmd
+	if ! check_pkg epel-release
+	then
+		echo -n "- - - Installation EPEL : "
+		add_pkg "https://dl.fedoraproject.org/pub/epel/epel-release-latest-$(rpm -E %rhel).noarch.rpm"
+		check_cmd
+	fi
 fi
 
+# CRB
+if [[ $ISEL -eq 1 ]]
+then
+	if [[ $ISRH -eq 1 ]]
+	then
+		if ! check_repo_dnf "codeready-builder-for-rhel-$RH0-x86_64-rpms" 
+		then
+			echo -n "- - - Activation Code Ready Builder : "
+			enable_repo "codeready-builder-for-rhel-$RH0-x86_64-rpms"
+			check_cmd
+		fi
+	fi
+	if [[ $ISAL -eq 1 ]]
+	then
+		if ! check_repo_dnf "crb"
+		then
+			echo -n "- - - Activation Code Ready Builder : "
+			enable_repo "crb"
+			check_cmd
+		fi
+	fi
+fi
+
+## COPR PERSO
+if [[ $ISFC -eq 1 ]]
+then
+	if check_copr 'adriend/fedora-apps'
+		then
+		echo -n "- - - Activation COPR adriend/fedora-apps : "
+		add_copr "adriend/fedora-apps"
+		check_cmd
+	fi
+fi
+if [[ $ISEL -eq 1 ]]
+then
+	if check_copr 'adriend/el-apps'
+		then
+		echo -n "- - - Activation COPR adriend/el-apps : "
+		add_copr "adriend/el-apps"
+		check_cmd
+	fi
+fi
 
 ## RPMFUSION
-if ! check_pkg rpmfusion-free-release
+if [[ $ISFC -eq 1 ]]
 then
-	echo -n "- - - Installation RPM Fusion Free : "
-	add_pkg "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
-	check_cmd
+	if ! check_pkg rpmfusion-free-release
+	then
+		echo -n "- - - Installation RPM Fusion Free : "
+		add_pkg "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
+		check_cmd
+	fi
+	if ! check_pkg rpmfusion-nonfree-release
+	then
+		echo -n "- - - Installation RPM Fusion Nonfree : "
+		add_pkg "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+		check_cmd
+	fi
 fi
-if ! check_pkg rpmfusion-nonfree-release
+
+if [[ $ISEL -eq 1 ]]
 then
-	echo -n "- - - Installation RPM Fusion Nonfree : "
-	add_pkg "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
-	check_cmd
+	if ! check_pkg rpmfusion-free-release
+	then
+		echo -n "- - - Installation RPM Fusion Free : "
+		add_pkg "https://download1.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm"
+		check_cmd
+	fi
+	if ! check_pkg rpmfusion-nonfree-release
+	then
+		echo -n "- - - Installation RPM Fusion Nonfree : "
+		add_pkg "https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm"
+		check_cmd
+	fi
 fi
 
 ## VIVALDI
-if ! check_repo_file vivaldi.repo
+if [[ $(grep -c 'vivaldi:on' $ICI/$RPELIST) == "1" ]]
 then
-	echo -n "- - - Installation Vivaldi Repo : "
-	echo "[vivaldi]
-	name=vivaldi
-	baseurl=https://repo.vivaldi.com/archive/rpm/x86_64
-	enabled=1
-	gpgcheck=1
-	gpgkey=http://repo.vivaldi.com/archive/linux_signing_key.pub" 2>/dev/null > /etc/yum.repos.d/vivaldi.repo
-	check_cmd
-	sed -e 's/\t//g' -i /etc/yum.repos.d/vivaldi.repo
+	if ! check_repo_file vivaldi.repo
+	then
+		echo -n "- - - Installation Vivaldi Repo : "
+		echo "[vivaldi]
+		name=vivaldi
+		baseurl=https://repo.vivaldi.com/archive/rpm/x86_64
+		enabled=1
+		gpgcheck=1
+		gpgkey=http://repo.vivaldi.com/archive/linux_signing_key.pub" 2>/dev/null > /etc/yum.repos.d/vivaldi.repo
+		check_cmd
+		sed -e 's/\t//g' -i /etc/yum.repos.d/vivaldi.repo
+	fi
 fi
 
 ## GOOGLE CHROME
-if [[ -e /etc/yum.repos.d/google-chrome.repo &&  $(grep -c 'enabled=0' /etc/yum.repos.d/google-chrome.repo) -eq 1 ]]
+if [[ $(grep -c 'googlechrome:on' $ICI/$RPELIST) == "1" ]]
 then
-	rm -f /etc/yum.repos.d/google-chrome.repo
-fi
-if ! check_repo_file google-chrome.repo
-then
-	echo -n "- - - Installation Google Chrome Repo : "
-	echo "[google-chrome]
-	name=google-chrome
-	baseurl=https://dl.google.com/linux/chrome/rpm/stable/x86_64
-	enabled=1
-	gpgcheck=1
-	gpgkey=https://dl.google.com/linux/linux_signing_key.pub" 2>/dev/null > /etc/yum.repos.d/google-chrome.repo
-	check_cmd
-	sed -e 's/\t//g' -i /etc/yum.repos.d/google-chrome.repo
+	if [[ -e /etc/yum.repos.d/google-chrome.repo &&  $(grep -c 'enabled=0' /etc/yum.repos.d/google-chrome.repo) -eq 1 ]]
+	then
+		rm -f /etc/yum.repos.d/google-chrome.repo
+	fi
+	if ! check_repo_file google-chrome.repo
+	then
+		echo -n "- - - Installation Google Chrome Repo : "
+		echo "[google-chrome]
+		name=google-chrome
+		baseurl=https://dl.google.com/linux/chrome/rpm/stable/x86_64
+		enabled=1
+		gpgcheck=1
+		gpgkey=https://dl.google.com/linux/linux_signing_key.pub" 2>/dev/null > /etc/yum.repos.d/google-chrome.repo
+		check_cmd
+		sed -e 's/\t//g' -i /etc/yum.repos.d/google-chrome.repo
+	fi
 fi
 
 ## MICROSOFT
-if ! check_repo_file microsoft-prod.repo
+if [[ $(grep -c 'microsoft:on' $ICI/$RPELIST) == "1" ]]
 then
-	echo -n "- - - Installation Microsoft Prod Repo : "
-	echo "[packages-microsoft-com-pro]
-	name=Microsoft Production
-	baseurl=https://packages.microsoft.com/rhel/9/prod/
-	enabled=1
-	gpgcheck=1
-	gpgkey=https://packages.microsoft.com/keys/microsoft.asc" 2>/dev/null > /etc/yum.repos.d/microsoft-prod.repo
-	check_cmd
-	sed -e 's/\t//g' -i /etc/yum.repos.d/microsoft-prod.repo
+	if ! check_repo_file microsoft-prod.repo
+	then
+		if [[ $ISEL -eq 1 ]]
+		then
+			MSPRODOS="rhel/$RH0"
+		fi
+		if [[ $ISFC -eq 1 ]]
+		then
+			MSPRODOS="fedora/\$releasever"
+		fi
+
+		echo -n "- - - Installation Microsoft Prod Repo : "
+		echo "[packages-microsoft-com-pro]
+		name=Microsoft Production
+		baseurl=https://packages.microsoft.com/$MSPRODOS/prod/
+		enabled=1
+		gpgcheck=1
+		gpgkey=https://packages.microsoft.com/keys/microsoft.asc" 2>/dev/null > /etc/yum.repos.d/microsoft-prod.repo
+		check_cmd
+		sed -e 's/\t//g' -i /etc/yum.repos.d/microsoft-prod.repo
+	fi
 fi
 
 ## FLATHUB
@@ -545,15 +753,30 @@ fi
 
 ## INSTALL CODECS
 echo "07- Vérification CoDec"
-for p in $CODEC
+while read -r line
 do
-	if ! check_pkg "$p"
+	if [[ "$line" == add:* ]]
 	then
-		echo -n "- - - Installation CoDec $p : "
-		add_pkg "$p"
-		check_cmd
+		p=${line#add:}
+		if ! check_pkg "$p"
+		then
+			echo -n "- - - Installation CoDec $p : "
+			add_pkg "$p"
+			check_cmd
+		fi
 	fi
-done
+	
+	if [[ "$line" == del:* ]]
+	then
+		p=${line#del:}
+		if check_pkg "$p"
+		then
+			echo -n "- - - Suppression CoDec $p : "
+			del_pkg "$p"
+			check_cmd
+		fi
+	fi
+done < "$ICI/$CDCLIST"
 
 ### INSTALL OUTILS GNOME
 echo "08- Vérification composants GNOME"
@@ -580,7 +803,7 @@ do
 			check_cmd
 		fi
 	fi
-done < "$ICI/gnome.list"
+done < "$ICI/$GNMLIST"
 
 ### INSTALL/SUPPRESSION RPMS SELON LISTE
 echo "09- Gestion des paquets RPM"
@@ -607,7 +830,7 @@ do
 			check_cmd
 		fi
 	fi
-done < "$ICI/packages.list"
+done < "$ICI/$PKGLIST"
 
 ### INSTALL/SUPPRESSION FLATPAK SELON LISTE
 echo "10- Gestion des paquets FLATPAK"
@@ -634,7 +857,7 @@ do
 			check_cmd
 		fi
 	fi
-done < "$ICI/flatpak.list"
+done < "$ICI/$FPKLIST"
 
 ### Vérif configuration système
 echo "11- Configuration personnalisée du système"
@@ -647,7 +870,7 @@ then
 fi
 if [[ $(grep -c 'vm.swappiness' "$SYSCTLFIC") -lt 1 ]]
 then
-	echo -n "- - - Définition du swapiness à 10 : "
+	echo -n "- - - Définition du swapiness à 2 : "
 	echo "vm.swappiness = 2" >> "$SYSCTLFIC"
 	check_cmd
 fi
@@ -704,16 +927,16 @@ then
 fi
 
 
-if ! check_pkg "lbzip2"
+if ! check_pkg "pbzip2"
 then
-	echo -n "- - - Installation lbzip2 : "
-	add_pkg "lbzip2"
+	echo -n "- - - Installation pbzip2 : "
+	add_pkg "pbzip2"
 	check_cmd
 fi
-if [[ ! -e /usr/local/bin/bzip2 ]]
+if [[ ! -e /usr/local/bin/bzip2 || $(readlink -f /usr/local/bin/bzip2) == "/usr/bin/lbzip2" ]]
 then
 	echo -n "- - - Configuration bzip2 multithread : "
-	ln -s /usr/bin/lbzip2 /usr/local/bin/bzip2
+	ln -sf /usr/bin/pbzip2 /usr/local/bin/bzip2
 	check_cmd
 fi
 if [[ ! -e /usr/local/bin/bunzip2 ]]

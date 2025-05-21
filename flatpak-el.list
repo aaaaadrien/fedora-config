@@ -1,0 +1,39 @@
+# GUI : Multimedia
+add:com.github.marinm.songrec
+add:com.obsproject.Studio
+add:info.smplayer.SMPlayer
+add:org.strawberrymusicplayer.strawberry
+add:org.soundconverter.SoundConverter
+add:org.audacityteam.Audacity
+add:org.kde.kdenlive
+add:org.gnome.EasyTAG
+add:net.mediaarea.MediaInfo
+
+# GUI : Graphisme
+add:org.upscayl.Upscayl
+add:org.gimp.GIMP
+add:org.inkscape.Inkscape
+
+# GUI : Internet
+add:com.anydesk.Anydesk
+add:com.discordapp.Discord
+add:org.telegram.desktop
+
+# GUI : Réseau
+
+# GUI : Utilitaires
+del:com.usebottles.bottles
+add:com.github.tchx84.Flatseal
+
+# GUI : Sécurité
+add:org.keepassxc.KeePassXC
+
+# GUI : Jeux
+del:com.valvesoftware.Steam
+add:com.github.k4zmu2a.spacecadetpinball
+
+# GUI : Virtualisation
+add:org.virt_manager.virt-viewer
+
+# GUI : Admin système
+
