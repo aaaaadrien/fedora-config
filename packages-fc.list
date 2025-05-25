@@ -48,7 +48,7 @@ add:vim-enhanced
 # CLI : Contrib Fedora
 add:git
 add:koji
-add:python3-fedora
+add:python3-rpmfusion
 add:libtirpc-devel
 
 # CLI : devops
@@ -110,7 +110,6 @@ add:arm-image-installer
 add:pavucontrol
 del:clementine
 add:strawberry
-add:smplayer
 add:soundconverter
 add:kdenlive
 add:audacity
@@ -120,7 +119,10 @@ del:obs-studio
 del:obs-studio-plugin-webkitgtk
 del:obs-studio-plugin-browser
 add:mediainfo-gui
-add:HandBrake-gui
+del:HandBrake-gui
+del:smplayer
+add:showtime
+add:decibels
 
 # GUI : Virtualisation
 add:VirtualBox
@@ -144,6 +146,7 @@ add:vivaldi-stable
 add:google-chrome-stable
 del:telegram-desktop
 add:discord
+add:torbrowser-launcher
 
 # GUI : Utilitaires
 add:cool-retro-term

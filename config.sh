@@ -398,7 +398,7 @@ fi
 if [[ "$1" = "scriptupdate" ]]
 then
 	echo $0
-	wget -O- https://raw.githubusercontent.com/aaaaadrien/fedora-config/refs/heads/main/config-fedora.sh > "$0"
+	wget -O- https://raw.githubusercontent.com/aaaaadrien/fedora-config/refs/heads/main/config.sh > "$0"
 	chmod +x "$0"
 
 	wget -O- -q https://raw.githubusercontent.com/aaaaadrien/fedora-config/refs/heads/main/CHANGELOG.txt | head
