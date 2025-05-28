@@ -3,7 +3,6 @@
 #################
 ### VARIABLES ###
 #################
-RPMFUSIONCOMP="rpmfusion-free-appstream-data rpmfusion-nonfree-appstream-data rpmfusion-free-release-tainted rpmfusion-nonfree-release-tainted"
 
 # Fichier de log
 LOGFILE="/tmp/config-progress.log"
@@ -109,6 +108,16 @@ fi
 if [[ $ISEL -eq 1 ]]
 then
 	GNMLIST="gnome-el.list"
+fi
+
+# Définition RPM Fusion
+if [[ $ISFC -eq 1 ]]
+then
+	RPMFUSIONCOMP="rpmfusion-free-appstream-data rpmfusion-nonfree-appstream-data rpmfusion-free-release-tainted rpmfusion-nonfree-release-tainted"
+fi
+if [[ $ISEL -eq 1 ]]
+then
+	RPMFUSIONCOMP=""
 fi
 
 #####################
