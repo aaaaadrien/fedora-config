@@ -98,7 +98,8 @@ add:sox
 add:vorbisgain
 add:mediainfo
 add:yt-dlp
-add:cmus
+del:cmus
+add:mpv
 
 # CLI : Divers
 add:git
