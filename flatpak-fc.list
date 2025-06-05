@@ -22,3 +22,6 @@ add:com.github.k4zmu2a.spacecadetpinball
 add:org.virt_manager.virt-viewer
 
 # GUI : Admin système
+
+# GUI : Stream
+add:com.core447.StreamController
