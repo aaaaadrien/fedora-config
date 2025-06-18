@@ -120,6 +120,22 @@ then
 	RPMFUSIONCOMP=""
 fi
 
+# Définition GNOME
+if [[ $ISFC -eq 1 ]]
+then
+	if rpm -q fedora-release-workstation &> /dev/null
+	then
+		ISGNOME=1	
+	fi
+fi
+if [[ $ISEL -eq 1 ]]
+then
+	if rpm -q gnome-shell &> /dev/null
+	then
+		ISGNOME=1	
+	fi
+fi
+
 #####################
 ### FIN VARIABLES ###
 #####################
@@ -423,14 +439,14 @@ then
 fi
 
 # Tester si bien Fedora Workstation
-if [[ $ISFC -eq 1 ]]
-then
-	if ! check_pkg fedora-release-workstation
-	then
-		echo -e "\033[31mERREUR\033[0m Seule Fedora Workstation (GNOME) est supportée !"
-		exit 2;
-	fi
-fi
+#if [[ $ISFC -eq 1 ]]
+#then
+#	if ! check_pkg fedora-release-workstation
+#	then
+#		echo -e "\033[31mERREUR\033[0m Seule Fedora Workstation (GNOME) est supportée !"
+#		exit 2;
+#	fi
+#fi
 
 
 # Infos fichier log
@@ -789,30 +805,33 @@ done < "$ICI/$CDCLIST"
 
 ### INSTALL OUTILS GNOME
 echo "08- Vérification composants GNOME"
-while read -r line
-do
-	if [[ "$line" == add:* ]]
-	then
-		p=${line#add:}
-		if ! check_pkg "$p"
+if [[ $ISGNOME -eq 1 ]]
+then
+	while read -r line
+	do
+		if [[ "$line" == add:* ]]
 		then
-			echo -n "- - - Installation composant GNOME $p : "
-			add_pkg "$p"
-			check_cmd
+			p=${line#add:}
+			if ! check_pkg "$p"
+			then
+				echo -n "- - - Installation composant GNOME $p : "
+				add_pkg "$p"
+				check_cmd
+			fi
 		fi
-	fi
-	
-	if [[ "$line" == del:* ]]
-	then
-		p=${line#del:}
-		if check_pkg "$p"
+		
+		if [[ "$line" == del:* ]]
 		then
-			echo -n "- - - Suppression composant GNOME $p : "
-			del_pkg "$p"
-			check_cmd
+			p=${line#del:}
+			if check_pkg "$p"
+			then
+				echo -n "- - - Suppression composant GNOME $p : "
+				del_pkg "$p"
+				check_cmd
+			fi
 		fi
-	fi
-done < "$ICI/$GNMLIST"
+	done < "$ICI/$GNMLIST"
+fi
 
 ### INSTALL/SUPPRESSION RPMS SELON LISTE
 echo "09- Gestion des paquets RPM"
