@@ -152,6 +152,7 @@ add:torbrowser-launcher
 # GUI : Utilitaires
 add:cool-retro-term
 add:guake
+add:flameshot
 
 # GUI : Sécurité
 add:keepassxc
