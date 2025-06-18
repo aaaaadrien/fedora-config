@@ -804,9 +804,9 @@ do
 done < "$ICI/$CDCLIST"
 
 ### INSTALL OUTILS GNOME
-echo "08- Vérification composants GNOME"
 if [[ $ISGNOME -eq 1 ]]
 then
+	echo "08- Vérification composants GNOME"
 	while read -r line
 	do
 		if [[ "$line" == add:* ]]
@@ -831,6 +831,8 @@ then
 			fi
 		fi
 	done < "$ICI/$GNMLIST"
+else
+	echo "08- Vérification composants ENVIRONNEMENT BUREAU"
 fi
 
 ### INSTALL/SUPPRESSION RPMS SELON LISTE
