@@ -750,6 +750,28 @@ then
 	fi
 fi
 
+#LibreWolf
+if [[ $(grep -c 'librewolf:on' $ICI/$RPELIST) == "1" ]]
+then
+	if [[ -e /etc/yum.repos.d/librewolf.repo &&  $(grep -c 'enabled=0' /etc/yum.repos.d/librewolf.repo) -eq 1 ]]
+	then
+		rm -f /etc/yum.repos.d/librewolf.repo
+	fi
+	if ! check_repo_file librewolf.repo
+	then
+		echo -n "- - - Installation Librewolf Repo : "
+		echo "[librewolf]
+		name=LibreWolf Software Repository
+		enabled=1
+		gpgcheck=1
+		repo_gpgcheck=1
+		gpgkey=https://repo.librewolf.net/pubkey.gpg
+		baseurl=https://repo.librewolf.net" 2>/dev/null > /etc/yum.repos.d/librewolf.repo
+		check_cmd
+		sed -e 's/\t//g' -i /etc/yum.repos.d/librewolf.repo
+	fi
+fi
+
 ## FLATHUB
 if [[ $(flatpak remotes | grep -c flathub) -ne 1 ]]
 then
