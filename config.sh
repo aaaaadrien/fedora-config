@@ -744,7 +744,7 @@ then
 		enabled=1
 		gpgcheck=1
 		gpgkey=https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-		baseurl=https://brave-browser-rpm-release.s3.brave.com/\$basearch" 2>/dev/null > /etc/yum.repos.d/google-chrome.repo
+		baseurl=https://brave-browser-rpm-release.s3.brave.com/\$basearch" 2>/dev/null > /etc/yum.repos.d/brave-browser.repo
 		check_cmd
 		sed -e 's/\t//g' -i /etc/yum.repos.d/brave-browser.repo
 	fi
