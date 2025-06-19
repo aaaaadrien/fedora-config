@@ -729,6 +729,27 @@ then
 	fi
 fi
 
+# BRAVE
+if [[ $(grep -c 'brave:on' $ICI/$RPELIST) == "1" ]]
+then
+	if [[ -e /etc/yum.repos.d/brave-browser.repo &&  $(grep -c 'enabled=0' /etc/yum.repos.d/brave-browser.repo) -eq 1 ]]
+	then
+		rm -f /etc/yum.repos.d/brave-browser.repo
+	fi
+	if ! check_repo_file brave-browser.repo
+	then
+		echo -n "- - - Installation Brave Repo : "
+		echo "[brave-browser]
+		name=Brave Browser
+		enabled=1
+		gpgcheck=1
+		gpgkey=https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+		baseurl=https://brave-browser-rpm-release.s3.brave.com/\$basearch" 2>/dev/null > /etc/yum.repos.d/google-chrome.repo
+		check_cmd
+		sed -e 's/\t//g' -i /etc/yum.repos.d/brave-browser.repo
+	fi
+fi
+
 ## FLATHUB
 if [[ $(flatpak remotes | grep -c flathub) -ne 1 ]]
 then
