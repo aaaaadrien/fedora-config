@@ -133,7 +133,7 @@ del:virt-viewer
 # GUI : Graphisme
 add:gimp
 add:inkscape
-del:flameshot
+add:flameshot
 
 # GUI : Reseau
 add:remmina
@@ -152,7 +152,6 @@ add:torbrowser-launcher
 # GUI : Utilitaires
 add:cool-retro-term
 add:guake
-add:flameshot
 
 # GUI : Sécurité
 add:keepassxc
