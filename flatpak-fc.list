@@ -6,7 +6,7 @@ add:com.obsproject.Studio
 add:org.upscayl.Upscayl
 
 # GUI : Internet
-add:com.anydesk.Anydesk
+del:com.anydesk.Anydesk
 del:com.discordapp.Discord
 add:org.telegram.desktop
 
