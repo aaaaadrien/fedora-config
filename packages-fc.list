@@ -146,7 +146,7 @@ add:evolution
 add:vivaldi-stable
 add:google-chrome-stable
 del:telegram-desktop
-add:discord
+del:discord
 add:torbrowser-launcher
 
 # GUI : Utilitaires

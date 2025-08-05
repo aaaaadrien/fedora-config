@@ -16,7 +16,7 @@ add:org.inkscape.Inkscape
 
 # GUI : Internet
 add:com.anydesk.Anydesk
-add:com.discordapp.Discord
+del:com.discordapp.Discord
 add:org.telegram.desktop
 
 # GUI : Réseau
