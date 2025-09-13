@@ -116,9 +116,8 @@ add:kdenlive
 add:audacity
 add:easytag
 del:peek
-del:obs-studio
-del:obs-studio-plugin-webkitgtk
-del:obs-studio-plugin-browser
+add:obs-studio
+add:obs-studio-plugin-browser
 add:mediainfo-gui
 del:HandBrake-gui
 del:smplayer
@@ -146,7 +145,7 @@ add:evolution
 add:vivaldi-stable
 add:google-chrome-stable
 del:telegram-desktop
-del:discord
+add:discord
 add:torbrowser-launcher
 
 # GUI : Utilitaires

@@ -1,6 +1,6 @@
 # GUI : Multimedia
 add:com.github.marinm.songrec
-add:com.obsproject.Studio
+del:com.obsproject.Studio
 
 # GUI : Graphisme
 add:org.upscayl.Upscayl
