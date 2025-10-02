@@ -54,7 +54,7 @@ add:libtirpc-devel
 # CLI : devops
 add:podman
 add:podman-tui
-add:podman-docker
+add:podman-compose
 add:toolbox
 add:toolbox-extra-tools
 
