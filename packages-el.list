@@ -49,6 +49,7 @@ add:git
 # CLI : devops
 add:podman
 add:podman-tui
+add:podman-docker
 add:toolbox
 add:toolbox-extra-tools
 
