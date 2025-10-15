@@ -1,6 +1,7 @@
 # GUI : Multimedia
 add:com.github.marinm.songrec
 add:com.obsproject.Studio
+add:com.obsproject.Studio.Plugin.BackgroundRemoval
 
 # GUI : Graphisme
 add:org.upscayl.Upscayl

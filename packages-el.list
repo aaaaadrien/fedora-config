@@ -67,7 +67,8 @@ add:fastfetch
 add:inxi
 add:lm_sensors
 add:nvtop
-add:ncdu
+del:ncdu
+add:gdu
 add:cronie
 add:mariadb
 add:nfs-utils
