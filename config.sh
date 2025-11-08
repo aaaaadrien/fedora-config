@@ -772,6 +772,27 @@ then
 	fi
 fi
 
+#Plakar
+if [[ $(grep -c 'plakar:on' $ICI/$RPELIST) == "1" ]]
+then
+	if [[ -e /etc/yum.repos.d/plakar.repo &&  $(grep -c 'enabled=0' /etc/yum.repos.d/plakar.repo) -eq 1 ]]
+	then
+		rm -f /etc/yum.repos.d/plakar.repo
+	fi
+	if ! check_repo_file plakar.repo
+	then
+		echo -n "- - - Installation Plakar Repo : "
+		echo "[plakar]
+		name=Plakar Repository
+		baseurl=https://packages.plakar.io/rpm/$(uname -m)/
+		enabled=1
+		gpgcheck=0
+		gpgkey=https://packages.plakar.io/keys/plakar.gpg" 2>/dev/null > /etc/yum.repos.d/plakar.repo
+		check_cmd
+		sed -e 's/\t//g' -i /etc/yum.repos.d/plakar.repo
+	fi
+fi
+
 ## FLATHUB
 if [[ $(flatpak remotes | grep -c flathub) -ne 1 ]]
 then
