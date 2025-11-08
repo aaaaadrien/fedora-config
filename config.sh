@@ -974,6 +974,18 @@ then
 	echo "kernel.sysrq = 1" >> "$SYSCTLFIC"
 	check_cmd
 fi
+if [[ $(grep -c 'fs.suid_dumpable' "$SYSCTLFIC") -lt 1 ]]
+then
+	echo -n "- - - Désactivation fs.suid_dumpable : "
+	echo "fs.suid_dumpable=0" >> "$SYSCTLFIC"
+	check_cmd
+fi
+if [[ $(grep -c 'kernel.core_pattern' "$SYSCTLFIC") -lt 1 ]]
+then
+	echo -n "- - - Désactivation kernel.core_pattern : "
+	echo 'kernel.core_pattern=|/bin/false' >> "$SYSCTLFIC"
+	check_cmd
+fi
 
 #PROFILEFIC="/etc/profile.d/adrien.sh"
 #if [[ ! -e "$PROFILEFIC" ]]
