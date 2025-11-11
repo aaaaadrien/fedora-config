@@ -14,7 +14,7 @@ add:org.telegram.desktop
 # GUI : Utilitaires
 del:com.usebottles.bottles
 add:com.github.tchx84.Flatseal
-add:io.github.flattool.Warehouse
+del:io.github.flattool.Warehouse
 
 # GUI : Jeux
 del:com.valvesoftware.Steam

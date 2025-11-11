@@ -729,6 +729,23 @@ then
 	fi
 fi
 
+## MICROSOFT VSCODE
+if [[ $(grep -c 'vscode:on' $ICI/$RPELIST) == "1" ]]
+then
+	if ! check_repo_file microsoft-vscode.repo
+	then
+		echo -n "- - - Installation Microsoft Vscode Repo : "
+		echo "[vscode-yum]
+		name=vscode-yum
+		baseurl=https://packages.microsoft.com/yumrepos/vscode/
+		enabled=1
+		gpgcheck=1
+		gpgkey=https://packages.microsoft.com/yumrepos/vscode/repodata/repomd.xml.key" 2>/dev/null > /etc/yum.repos.d/microsoft-vscode.repo
+		check_cmd
+		sed -e 's/\t//g' -i /etc/yum.repos.d/microsoft-vscode.repo
+	fi
+fi
+
 # BRAVE
 if [[ $(grep -c 'brave:on' $ICI/$RPELIST) == "1" ]]
 then
