@@ -99,6 +99,7 @@ add:plakar
 add:abcde
 add:sox
 add:vorbisgain
+add:mp3gain
 add:mediainfo
 add:yt-dlp
 del:cmus
