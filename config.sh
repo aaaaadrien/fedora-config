@@ -523,12 +523,6 @@ then
 	echo "max_parallel_downloads=10" >> /etc/dnf/dnf.conf
 	check_cmd
 fi
-if [[ $(grep -c 'countme=' /etc/dnf/dnf.conf) -lt 1 ]]
-then
-	echo -n "- - - Correction statistiques : "
-	echo "countme=false" >> /etc/dnf/dnf.conf
-	check_cmd
-fi
 if [[ $(grep -c 'deltarpm=' /etc/dnf/dnf.conf) -lt 1 ]]
 then
         echo -n "- - - Correction deltarpm désactivés : "
