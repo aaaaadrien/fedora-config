@@ -45,6 +45,7 @@ add:vim-enhanced
 
 # CLI : Contrib Fedora
 add:git
+add:mock
 
 # CLI : devops
 add:podman

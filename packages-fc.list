@@ -48,6 +48,7 @@ add:vim-enhanced
 # CLI : Contrib Fedora
 add:git
 add:koji
+add:mock
 add:python3-rpmfusion
 add:libtirpc-devel
 
