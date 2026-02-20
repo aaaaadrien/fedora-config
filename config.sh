@@ -672,7 +672,7 @@ then
         gpgcheck=1
         gpgkey=http://repo.vivaldi.com/archive/linux_signing_key.pub" 2>/dev/null > /etc/yum.repos.d/vivaldi.repo
         check_cmd
-        sed -e 's/\t//g' -i /etc/yum.repos.d/vivaldi.repo
+        sed -e 's/[[:blank:]]//g' -i /etc/yum.repos.d/vivaldi.repo
     fi
 fi
 
@@ -693,7 +693,7 @@ then
         gpgcheck=1
         gpgkey=https://dl.google.com/linux/linux_signing_key.pub" 2>/dev/null > /etc/yum.repos.d/google-chrome.repo
         check_cmd
-        sed -e 's/\t//g' -i /etc/yum.repos.d/google-chrome.repo
+        sed -e 's/[[:blank:]]//g' -i /etc/yum.repos.d/google-chrome.repo
     fi
 fi
 
@@ -719,7 +719,7 @@ then
         gpgcheck=1
         gpgkey=https://packages.microsoft.com/keys/microsoft.asc" 2>/dev/null > /etc/yum.repos.d/microsoft-prod.repo
         check_cmd
-        sed -e 's/\t//g' -i /etc/yum.repos.d/microsoft-prod.repo
+        sed -e 's/[[:blank:]]//g' -i /etc/yum.repos.d/microsoft-prod.repo
     fi
 fi
 
@@ -736,7 +736,7 @@ then
         gpgcheck=1
         gpgkey=https://packages.microsoft.com/yumrepos/vscode/repodata/repomd.xml.key" 2>/dev/null > /etc/yum.repos.d/microsoft-vscode.repo
         check_cmd
-        sed -e 's/\t//g' -i /etc/yum.repos.d/microsoft-vscode.repo
+        sed -e 's/[[:blank:]]//g' -i /etc/yum.repos.d/microsoft-vscode.repo
     fi
 fi
 
@@ -757,7 +757,7 @@ then
         gpgkey=https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
         baseurl=https://brave-browser-rpm-release.s3.brave.com/\$basearch" 2>/dev/null > /etc/yum.repos.d/brave-browser.repo
         check_cmd
-        sed -e 's/\t//g' -i /etc/yum.repos.d/brave-browser.repo
+        sed -e 's/[[:blank:]]//g' -i /etc/yum.repos.d/brave-browser.repo
     fi
 fi
 
@@ -779,7 +779,7 @@ then
         gpgkey=https://repo.librewolf.net/pubkey.gpg
         baseurl=https://repo.librewolf.net" 2>/dev/null > /etc/yum.repos.d/librewolf.repo
         check_cmd
-        sed -e 's/\t//g' -i /etc/yum.repos.d/librewolf.repo
+        sed -e 's/[[:blank:]]//g' -i /etc/yum.repos.d/librewolf.repo
     fi
 fi
 
@@ -800,7 +800,7 @@ then
         gpgcheck=0
         gpgkey=https://packages.plakar.io/keys/plakar.gpg" 2>/dev/null > /etc/yum.repos.d/plakar.repo
         check_cmd
-        sed -e 's/\t//g' -i /etc/yum.repos.d/plakar.repo
+        sed -e 's/[[:blank:]]//g' -i /etc/yum.repos.d/plakar.repo
     fi
 fi
 
