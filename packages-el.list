@@ -56,7 +56,6 @@ add:toolbox-extra-tools
 
 # CLI : Scripting
 add:ShellCheck
-add:powershell
 
 # CLI : Système
 add:htop

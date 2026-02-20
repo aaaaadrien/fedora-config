@@ -698,30 +698,31 @@ then
 fi
 
 ## MICROSOFT
-if [[ $(grep -c 'microsoft:on' $ICI/$RPELIST) == "1" ]]
-then
-    if ! check_repo_file microsoft-prod.repo
-    then
-        if [[ $ISEL -eq 1 ]]
-        then
-            MSPRODOS="rhel/$RH0"
-        fi
-        if [[ $ISFC -eq 1 ]]
-        then
-            MSPRODOS="fedora/\$releasever"
-        fi
-
-        echo -n "- - - Installation Microsoft Prod Repo : "
-        echo "[packages-microsoft-com-pro]
-        name=Microsoft Production
-        baseurl=https://packages.microsoft.com/$MSPRODOS/prod/
-        enabled=1
-        gpgcheck=1
-        gpgkey=https://packages.microsoft.com/keys/microsoft.asc" 2>/dev/null > /etc/yum.repos.d/microsoft-prod.repo
-        check_cmd
-        sed -e 's/[[:blank:]]//g' -i /etc/yum.repos.d/microsoft-prod.repo
-    fi
-fi
+# Disabled because no Powershell now
+#if [[ $(grep -c 'microsoft:on' $ICI/$RPELIST) == "1" ]]
+#then
+#    if ! check_repo_file microsoft-prod.repo
+#    then
+#        if [[ $ISEL -eq 1 ]]
+#        then
+#            MSPRODOS="rhel/$RH0"
+#        fi
+#        if [[ $ISFC -eq 1 ]]
+#        then
+#            MSPRODOS="fedora/\$releasever"
+#        fi
+#
+#        echo -n "- - - Installation Microsoft Prod Repo : "
+#        echo "[packages-microsoft-com-pro]
+#        name=Microsoft Production
+#        baseurl=https://packages.microsoft.com/$MSPRODOS/prod/
+#        enabled=1
+#        gpgcheck=1
+#        gpgkey=https://packages.microsoft.com/keys/microsoft.asc" 2>/dev/null > /etc/yum.repos.d/microsoft-prod.repo
+#        check_cmd
+#        sed -e 's/[[:blank:]]//g' -i /etc/yum.repos.d/microsoft-prod.repo
+#    fi
+#fi
 
 ## MICROSOFT VSCODE
 if [[ $(grep -c 'vscode:on' $ICI/$RPELIST) == "1" ]]
