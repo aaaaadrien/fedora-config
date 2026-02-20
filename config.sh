@@ -378,10 +378,13 @@ else
     echo "Usage incorrect du script :"
     echo "- $(basename $0)                : Lance la config et/ou les mises à jour"
     echo "- $(basename $0) check          : Vérifie les mises à jour disponibles et propose de les lancer"
-    echo "- $(basename $0) testing        : Vérifie les mises à jour disponibles en test (Fedora uniquement)"
     echo "- $(basename $0) upgrade        : Lance la mise à niveau de Fedora vers la version suivante"
     echo "- $(basename $0) offline        : Met à jour les RPM en mode offline"
     echo "- $(basename $0) scriptupdate   : Met à jour le script depuis Github"
+    echo ""
+    echo "Danger zone :"
+    echo "- $(basename $0) testing        : Vérifie les mises à jour disponibles en test (Fedora uniquement)"
+    echo "- $(basename $0) upgrade beta   : Lance la mise à niveau de Fedora vers la version beta suivante"
     exit 1;
 fi
 
