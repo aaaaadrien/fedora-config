@@ -31,13 +31,15 @@ add:redhat-display-vf-fonts
 add:redhat-display-fonts
 
 # GNOME Apps
+del:abrt
+del:gnome-terminal
+del:gnome-software
+del:PackageKit
 add:ptyxis
 add:seahorse
 add:gnome-tweaks
 add:file-roller
 add:dconf-editor
-del:abrt
-del:gnome-terminal
 add:evolution
 add:evolution-ews
 
