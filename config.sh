@@ -799,10 +799,10 @@ then
         echo -n "- - - Installation Plakar Repo : "
         echo "[plakar]
         name=Plakar Repository
-        baseurl=https://packages.plakar.io/rpm/$(uname -m)/
+        baseurl=https://plakar.io/dist/repos/rpm/$(uname -m)/
         enabled=1
         gpgcheck=0
-        gpgkey=https://packages.plakar.io/keys/plakar.gpg" 2>/dev/null > /etc/yum.repos.d/plakar.repo
+        gpgkey=https://plakar.io/dist/keys/community-v1.0.0.gpg" 2>/dev/null > /etc/yum.repos.d/plakar.repo
         check_cmd
         sed -e 's/[[:blank:]]//g' -i /etc/yum.repos.d/plakar.repo
     fi
