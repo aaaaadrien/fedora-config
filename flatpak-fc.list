@@ -11,6 +11,7 @@ del:com.anydesk.Anydesk
 del:com.discordapp.Discord
 add:org.telegram.desktop
 add:com.mattermost.Desktop
+add:im.riot.Riot
 
 # GUI : Utilitaires
 del:com.usebottles.bottles
