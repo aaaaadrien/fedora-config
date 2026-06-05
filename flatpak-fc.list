@@ -10,6 +10,7 @@ add:org.upscayl.Upscayl
 del:com.anydesk.Anydesk
 del:com.discordapp.Discord
 add:org.telegram.desktop
+add:com.mattermost.Desktop
 
 # GUI : Utilitaires
 del:com.usebottles.bottles
