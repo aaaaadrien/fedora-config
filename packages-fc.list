@@ -145,6 +145,7 @@ add:flameshot
 add:remmina
 del:anydesk
 add:gqrx
+add:sdrpp
 
 # GUI : Internet
 add:epiphany

@@ -21,6 +21,7 @@ del:io.github.flattool.Warehouse
 # GUI : Jeux
 del:com.valvesoftware.Steam
 add:com.github.k4zmu2a.spacecadetpinball
+add:com.vysp3r.ProtonPlus
 
 # GUI : Virtualisation
 add:org.virt_manager.virt-viewer
