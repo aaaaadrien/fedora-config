@@ -787,6 +787,29 @@ then
     fi
 fi
 
+#Mozilla
+if [[ $(grep -c 'mozilla:on' $ICI/$RPELIST) == "1" ]]
+then
+    if [[ -e /etc/yum.repos.d/mozilla.repo &&  $(grep -c 'enabled=0' /etc/yum.repos.d/mozilla.repo) -eq 1 ]]
+    then
+        rm -f /etc/yum.repos.d/mozilla.repo
+    fi
+    if ! check_repo_file mozilla.repo
+    then
+        echo -n "- - - Installation Mozilla Repo : "
+        echo "[mozilla]
+        name=Mozilla Packages
+        enabled=1
+        baseurl=https://packages.mozilla.org/rpm/firefox
+        gpgcheck=1
+        gpgkey=https://packages.mozilla.org/rpm/firefox/signing-key.gpg
+        priority=10
+        repo_gpgcheck=0" 2>/dev/null > /etc/yum.repos.d/mozilla.repo
+        check_cmd
+        sed -e 's/[[:blank:]]//g' -i /etc/yum.repos.d/mozilla.repo
+    fi
+fi
+
 #Plakar
 if [[ $(grep -c 'plakar:on' $ICI/$RPELIST) == "1" ]]
 then
