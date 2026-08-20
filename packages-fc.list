@@ -132,7 +132,7 @@ add:showtime
 add:decibels
 
 # GUI : Virtualisation
-add:VirtualBox
+del:VirtualBox
 add:virt-manager
 del:virt-viewer
 
