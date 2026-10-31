@@ -140,6 +140,7 @@ del:virt-viewer
 add:gimp
 add:inkscape
 add:flameshot
+add:hugin
 
 # GUI : Reseau
 add:remmina

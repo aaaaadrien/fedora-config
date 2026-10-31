@@ -30,3 +30,6 @@ add:org.virt_manager.virt-viewer
 
 # GUI : Stream
 add:com.core447.StreamController
+
+# GUI ; Divers
+add:com.rafaelmardojai.Blanket
