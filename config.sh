@@ -120,19 +120,24 @@ then
     RPMFUSIONCOMP=""
 fi
 
-# Définition GNOME
+# Définition EDITION et DESKTOP
 if [[ $ISFC -eq 1 ]]
 then
     if rpm -q fedora-release-workstation &> /dev/null
     then
-        ISGNOME=1   
+        ISGNOME=1
     fi
+    if rpm -q fedora-release-kde-desktop &> /dev/null
+    then
+        ISKDE=1
+    fi
+
 fi
 if [[ $ISEL -eq 1 ]]
 then
     if rpm -q gnome-shell &> /dev/null
     then
-        ISGNOME=1   
+        ISGNOME=1
     fi
 fi
 
