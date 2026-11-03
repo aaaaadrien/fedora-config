@@ -923,7 +923,7 @@ done < "$ICI/$CDCLIST"
 ### INSTALL SPECIFIQUE GNOME/KDE
 if [[ $ISGNOME -eq 1 ]]
 then
-    echo "08- Logiciels spécifiques ENVIRONNEMENT GNOME"
+    echo "08- Logiciels spécifiques GNOME"
     while read -r line
     do
         if [[ "$line" == add:* ]]
@@ -931,7 +931,7 @@ then
             p=${line#add:}
             if ! check_pkg "$p"
             then
-                echo -n "- - - Installation composant GNOME $p : "
+                echo -n "- - - Installation spécifique GNOME $p : "
                 add_pkg "$p"
                 check_cmd
             fi
@@ -942,7 +942,7 @@ then
             p=${line#del:}
             if check_pkg "$p"
             then
-                echo -n "- - - Suppression composant GNOME $p : "
+                echo -n "- - - Suppression spécifique GNOME $p : "
                 del_pkg "$p"
                 check_cmd
             fi
@@ -950,7 +950,7 @@ then
     done < "$ICI/$GNMLIST"
 elif [[ $ISKDE -eq 1 ]]
 then
-    echo "08- Logiciels spécifiques ENVIRONNEMENT KDE"
+    echo "08- Logiciels spécifiques KDE"
     while read -r line
     do
         if [[ "$line" == add:* ]]
@@ -958,7 +958,7 @@ then
             p=${line#add:}
             if ! check_pkg "$p"
             then
-                echo -n "- - - Installation composant KDE $p : "
+                echo -n "- - - Installation spécifique KDE $p : "
                 add_pkg "$p"
                 check_cmd
             fi
@@ -969,14 +969,14 @@ then
             p=${line#del:}
             if check_pkg "$p"
             then
-                echo -n "- - - Suppression composant KDE $p : "
+                echo -n "- - - Suppression spécifique KDE $p : "
                 del_pkg "$p"
                 check_cmd
             fi
         fi
     done < "$ICI/$KDELIST"
 else
-    echo "08- Vérification composants ENVIRONNEMENT BUREAU"
+    echo "08- Vérification composants spécifiques BUREAU"
 fi
 
 ### INSTALL/SUPPRESSION RPMS SELON LISTE
