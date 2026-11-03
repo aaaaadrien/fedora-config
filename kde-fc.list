@@ -1,0 +1,30 @@
+# Extensions GNOME a supprimer
+del:gnome-extensions-app
+del:gnome-shell-extension-user-theme
+del:gnome-shell-extension-dash-to-dock
+del:gnome-shell-extension-appindicator
+del:gnome-shell-extension-gsconnect
+
+# GNOME Apps
+del:gnome-terminal
+del:gnome-software
+del:PackageKit
+del:ptyxis
+del:seahorse
+del:gnome-tweaks
+del:file-roller
+del:dconf-editor
+#del:evolution
+#del:evolution-ews
+del:showtime
+del:decibels
+#del:remmina
+del:epiphany
+del:guake
+
+# KDE Apps
+add:konsole
+add:smplayer
+add:yakuake
+add:falkon
+

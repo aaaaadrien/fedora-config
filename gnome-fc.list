@@ -6,6 +6,9 @@
 #add:qgnomeplatform-qt5
 #add:qgnomeplatform-qt6
 
+# Intégration APPS KDE
+add:plasma-breeze
+
 # Themes
 add:adw-gtk3-theme
 
@@ -15,3 +18,20 @@ add:gnome-shell-extension-user-theme
 add:gnome-shell-extension-dash-to-dock
 add:gnome-shell-extension-appindicator
 del:gnome-shell-extension-gsconnect
+
+# GNOME Apps
+del:gnome-terminal
+del:gnome-software
+del:PackageKit
+add:ptyxis
+add:seahorse
+add:gnome-tweaks
+add:file-roller
+add:dconf-editor
+add:evolution
+add:evolution-ews
+add:showtime
+add:decibels
+add:remmina
+add:epiphany
+add:guake

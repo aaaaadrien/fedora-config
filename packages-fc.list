@@ -5,11 +5,11 @@
 add:aspell-fr
 add:libreoffice-langpack-fr
 
-# Intégration APPS KDE
-add:plasma-breeze
-
 # Specifque Hardware
 add:amd-ucode-firmware
+
+# Menage Fedora
+del:abrt
 
 # Admin SYS
 add:cockpit
@@ -30,19 +30,6 @@ add:redhat-mono-vf-fonts
 add:redhat-mono-fonts
 add:redhat-display-vf-fonts
 add:redhat-display-fonts
-
-# GNOME Apps
-del:abrt
-del:gnome-terminal
-del:gnome-software
-del:PackageKit
-add:ptyxis
-add:seahorse
-add:gnome-tweaks
-add:file-roller
-add:dconf-editor
-add:evolution
-add:evolution-ews
 
 # CLI : Console
 add:screen
@@ -105,7 +92,6 @@ add:vorbisgain
 add:mp3gain
 add:mediainfo
 add:yt-dlp
-del:cmus
 add:mpv
 
 # CLI : Divers
@@ -116,20 +102,14 @@ add:arm-image-installer
 
 # GUI : Multimedia
 add:pavucontrol
-del:clementine
 add:strawberry
 add:soundconverter
 add:kdenlive
 add:audacity
 add:easytag
-del:peek
 del:obs-studio
 del:obs-studio-plugin-browser
 add:mediainfo-gui
-del:HandBrake-gui
-del:smplayer
-add:showtime
-add:decibels
 
 # GUI : Virtualisation
 del:VirtualBox
@@ -139,18 +119,15 @@ del:virt-viewer
 # GUI : Graphisme
 add:gimp
 add:inkscape
-add:flameshot
+del:flameshot
 add:hugin
 
 # GUI : Reseau
-add:remmina
 del:anydesk
 add:gqrx
 add:sdrpp
 
 # GUI : Internet
-add:epiphany
-add:evolution
 add:vivaldi-stable
 add:google-chrome-stable
 del:telegram-desktop
@@ -159,7 +136,6 @@ add:torbrowser-launcher
 
 # GUI : Utilitaires
 add:cool-retro-term
-add:guake
 
 # GUI : Sécurité
 add:keepassxc

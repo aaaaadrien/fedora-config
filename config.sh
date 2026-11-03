@@ -110,6 +110,16 @@ then
     GNMLIST="gnome-el.list"
 fi
 
+# Définition du fichier kde.list
+if [[ $ISFC -eq 1 ]]
+then
+    KDELIST="kde-fc.list"
+fi
+if [[ $ISEL -eq 1 ]]
+then
+    KDELIST="kde-el.list"
+fi
+
 # Définition RPM Fusion
 if [[ $ISFC -eq 1 ]]
 then
@@ -910,10 +920,10 @@ do
     fi
 done < "$ICI/$CDCLIST"
 
-### INSTALL OUTILS GNOME
+### INSTALL SPECIFIQUE GNOME/KDE
 if [[ $ISGNOME -eq 1 ]]
 then
-    echo "08- Vérification composants GNOME"
+    echo "08- Logiciels spécifiques ENVIRONNEMENT GNOME"
     while read -r line
     do
         if [[ "$line" == add:* ]]
@@ -938,6 +948,33 @@ then
             fi
         fi
     done < "$ICI/$GNMLIST"
+elif [[ $ISKDE -eq 1 ]]
+then
+    echo "08- Logiciels spécifiques ENVIRONNEMENT KDE"
+    while read -r line
+    do
+        if [[ "$line" == add:* ]]
+        then
+            p=${line#add:}
+            if ! check_pkg "$p"
+            then
+                echo -n "- - - Installation composant KDE $p : "
+                add_pkg "$p"
+                check_cmd
+            fi
+        fi
+        
+        if [[ "$line" == del:* ]]
+        then
+            p=${line#del:}
+            if check_pkg "$p"
+            then
+                echo -n "- - - Suppression composant KDE $p : "
+                del_pkg "$p"
+                check_cmd
+            fi
+        fi
+    done < "$ICI/$KDELIST"
 else
     echo "08- Vérification composants ENVIRONNEMENT BUREAU"
 fi
