@@ -7,6 +7,12 @@
 # Fichier de log
 LOGFILE="/tmp/config-progress.log"
 
+# Installation NVIDIA (optionnelle)
+ISNVIDIA=0
+ISLIST=0
+NVIDIAREBOOT=0
+NVIDIASECUREBOOT=0
+
 # Détection DNF version
 DNFVERSION="$(readlink $(which dnf))"
 
@@ -120,6 +126,12 @@ then
     KDELIST="kde-el.list"
 fi
 
+# Définition du fichier nvidia.list
+if [[ $ISFC -eq 1 ]]
+then
+    NVLIST="nvidia-fc.list"
+fi
+
 # Définition RPM Fusion
 if [[ $ISFC -eq 1 ]]
 then
@@ -199,6 +211,233 @@ check_pkg()
 add_pkg()
 {
     dnf install -y --nogpgcheck "$1" >> "$LOGFILE" 2>&1
+}
+
+add_nvidia_pkg()
+{
+    dnf install -y --setopt=gpgcheck=1 "$1" >> "$LOGFILE" 2>&1
+}
+
+check_pkg_lists()
+{
+    local file line p
+    for file in "$@"
+    do
+        if [[ "$file" != *.list || ! -f "$file" || ! -r "$file" ]]
+        then
+            echo -e "\033[31mERREUR\033[0m Liste absente ou illisible : $file"
+            return 1
+        fi
+        while IFS= read -r line || [[ -n "$line" ]]
+        do
+            if [[ -z "$line" || "$line" == \#* ]]
+            then
+                continue
+            fi
+            if [[ "$line" != add:* && "$line" != del:* ]]
+            then
+                echo -e "\033[31mERREUR\033[0m Ligne incorrecte dans $file : $line (add: ou del: attendu)"
+                return 1
+            fi
+            p=${line#*:}
+            if [[ ! "$p" =~ ^[a-zA-Z0-9][a-zA-Z0-9._+-]*$ ]]
+            then
+                echo -e "\033[31mERREUR\033[0m Paquet incorrect dans $file : $p"
+                return 1
+            fi
+        done < "$file"
+    done
+}
+
+apply_pkg_list()
+{
+    local line p status
+    while IFS= read -r line || [[ -n "$line" ]]
+    do
+        if [[ -z "$line" || "$line" == \#* ]]
+        then
+            continue
+        fi
+        p=${line#*:}
+        status=0
+        if [[ "${1##*/}" == flatpak*.list ]]
+        then
+            if [[ "$line" == add:* ]] && ! check_flatpak "$p"
+            then
+                echo -n "- - - Installation flatpak $p : "
+                add_flatpak "$p" || status=$?
+            elif [[ "$line" == del:* ]] && check_flatpak "$p"
+            then
+                echo -n "- - - Suppression flatpak $p : "
+                # Ne pas nettoyer les autres Flatpak lors d'un traitement limité.
+                flatpak uninstall --noninteractive -y "$p" >> "$LOGFILE" 2>&1 || status=$?
+            else
+                continue
+            fi
+        else
+            if [[ "$line" == add:* ]] && ! check_pkg "$p"
+            then
+                echo -n "- - - Installation paquet $p : "
+                if [[ $ISNVIDIA -eq 1 ]]
+                then
+                    add_nvidia_pkg "$p" || status=$?
+                else
+                    add_pkg "$p" || status=$?
+                fi
+            elif [[ "$line" == del:* ]] && check_pkg "$p"
+            then
+                echo -n "- - - Suppression paquet $p : "
+                dnf remove -y "$p" >> "$LOGFILE" 2>&1 || status=$?
+            else
+                continue
+            fi
+        fi
+        if [[ $status -eq 0 ]]
+        then
+            echo -e "\033[32mOK\033[0m"
+        else
+            echo -e "\033[31mERREUR\033[0m Voir le log : $LOGFILE"
+            return 1
+        fi
+    done < "$1"
+}
+
+install_nvidia()
+{
+    local line p
+    while read -r line || [[ -n "$line" ]]
+    do
+        if [[ "$line" == add:* ]]
+        then
+            p=${line#add:}
+            if [[ ! "$p" =~ ^[a-zA-Z0-9][a-zA-Z0-9._+-]*$ ]]
+            then
+                echo -e "\033[31mERREUR\033[0m Paquet NVIDIA incorrect : $p"
+                return 1;
+            fi
+            if ! check_pkg "$p"
+            then
+                echo -n "- - - Installation NVIDIA $p : "
+                if add_nvidia_pkg "$p"
+                then
+                    echo -e "\033[32mOK\033[0m"
+                else
+                    echo -e "\033[31mERREUR\033[0m Voir le log : $LOGFILE. Ne pas redémarrer avant correction."
+                    return 1;
+                fi
+            fi
+        fi
+    done < "$NVFILE"
+}
+
+check_nvidia()
+{
+    local device vendor class
+    for device in /sys/bus/pci/devices/*
+    do
+        if [[ -r "$device/vendor" && -r "$device/class" ]]
+        then
+            read -r vendor < "$device/vendor"
+            read -r class < "$device/class"
+            if [[ "$vendor" == "0x10de" && "$class" == 0x03* ]]
+            then
+                return 0
+            fi
+        fi
+    done
+    return 1
+}
+
+check_nvidia_secureboot()
+{
+    local secureboot
+    if [[ ! -d /sys/firmware/efi ]]
+    then
+        return 0
+    fi
+    if ! command -v mokutil > /dev/null
+    then
+        add_nvidia_pkg "mokutil" || return 1
+    fi
+    secureboot=$(LC_ALL=C mokutil --sb-state 2>> "$LOGFILE") || return 1
+    if [[ "$secureboot" == *"SecureBoot disabled"* ]]
+    then
+        return 0
+    fi
+    if [[ "$secureboot" == *"SecureBoot enabled"* ]]
+    then
+        NVIDIASECUREBOOT=1
+        if [[ -s /etc/pki/akmods/certs/public_key.der ]]
+        then
+            mokutil --test-key /etc/pki/akmods/certs/public_key.der >> "$LOGFILE" 2>&1
+            return $?
+        fi
+    fi
+    return 1
+}
+
+check_nvidia_config()
+{
+    if [[ $ISFC -ne 1 || $(uname -m) != "x86_64" || -e /run/ostree-booted ]] || ! check_nvidia
+    then
+        echo -e "\033[31mERREUR\033[0m NVIDIA nécessite Fedora classique x86_64 avec une carte NVIDIA compatible"
+        return 1;
+    fi
+    echo -n "- - - Vérification Secure Boot pour NVIDIA : "
+    if check_nvidia_secureboot
+    then
+        echo -e "\033[32mOK\033[0m"
+    else
+        echo -e "\033[31mERREUR\033[0m"
+        echo "Préparer et enrôler la clé akmods avant de relancer le script :"
+        echo "https://rpmfusion.org/Howto/Secure%20Boot"
+        echo "Voir également le log : $LOGFILE"
+        return 1;
+    fi
+    ISNVIDIA=1
+}
+
+prepare_nvidia()
+{
+    local kernels lastkernel currentkernel kernel version moduleversion loadedversion
+    kernels=$(rpm -q kernel-core --qf "%{INSTALLTIME} %{VERSION}-%{RELEASE}.%{ARCH}\n") || return 1
+    lastkernel=$(echo "$kernels" | sort -nr | awk 'NR==1 {print $2}')
+    currentkernel=$(uname -r)
+    version=$(rpm -q xorg-x11-drv-nvidia --qf "%{VERSION}") || return 1
+    if [[ -z "$lastkernel" ]]
+    then
+        return 1
+    fi
+    for kernel in $(printf '%s\n' "$currentkernel" "$lastkernel" | sort -u)
+    do
+        echo "- - - Préparation du module NVIDIA pour $kernel" >> "$LOGFILE"
+        add_nvidia_pkg "kernel-devel-$kernel" || return 1
+        akmods --force --kernels "$kernel" --akmod nvidia >> "$LOGFILE" 2>&1 || return 1
+        depmod -a "$kernel" >> "$LOGFILE" 2>&1 || return 1
+        moduleversion=$(modinfo -k "$kernel" -F version nvidia 2>> "$LOGFILE") || return 1
+        if [[ "$moduleversion" != "$version" ]]
+        then
+            echo "Version du module NVIDIA $moduleversion différente du pilote $version ($kernel)" >> "$LOGFILE"
+            return 1
+        fi
+        if [[ $NVIDIASECUREBOOT -eq 1 ]]
+        then
+            if [[ -z $(modinfo -k "$kernel" -F signer nvidia 2>> "$LOGFILE") ]]
+            then
+                return 1
+            fi
+        fi
+        dracut --force --kver "$kernel" >> "$LOGFILE" 2>&1 || return 1
+    done
+    loadedversion=""
+    if [[ -r /sys/module/nvidia/version ]]
+    then
+        read -r loadedversion < /sys/module/nvidia/version
+    fi
+    if [[ "$loadedversion" != "$version" ]]
+    then
+        NVIDIAREBOOT=1
+    fi
 }
 
 del_pkg()
@@ -293,7 +532,12 @@ ask_reboot()
     fi
     if [[ ${rebootuser,,} == "k" ]]
     then
-        kexec_reboot
+        if [[ $ISNVIDIA -eq 1 ]]
+        then
+            echo -e "\033[33mUtiliser un redémarrage normal après la préparation du pilote NVIDIA.\033[0m"
+        else
+            kexec_reboot
+        fi
     fi
 }
 
@@ -389,12 +633,23 @@ then
 elif [[ "$1" == "coffee" ]] || [[ "$1" == "check" ]] || [[ "$1" == "testing" ]] || [[ "$1" == "upgrade" ]] || [[ "$1" == "scriptupdate" ]] || [[ "$1" == "offline" ]]
 then
     echo "OK" > /dev/null
+elif [[ "$1" == "files" ]]
+then
+    if [[ $# -lt 2 ]]
+    then
+        echo "Usage : $(basename "$0") files fichier1.list [fichier2.list ...]"
+        exit 1;
+    fi
+    shift
+    ISLIST=1
+    check_pkg_lists "$@" || exit 1;
 else
     echo "Usage incorrect du script :"
     echo "- $(basename $0)                : Lance la config et/ou les mises à jour"
     echo "- $(basename $0) check          : Vérifie les mises à jour disponibles et propose de les lancer"
     echo "- $(basename $0) upgrade        : Lance la mise à niveau de Fedora vers la version suivante"
     echo "- $(basename $0) offline        : Met à jour les RPM en mode offline"
+    echo "- $(basename $0) files fichier1.list [fichier2.list ...] : Applique uniquement les listes indiquées"
     echo "- $(basename $0) scriptupdate   : Met à jour le script depuis Github"
     echo ""
     echo "Danger zone :"
@@ -481,7 +736,44 @@ date >> "$LOGFILE"
 ### PROGRAMME ###
 #################
 ICI=$(dirname "$0")
+NVFILE="$ICI/$NVLIST"
 
+
+## CAS LISTES SEULES
+if [[ $ISLIST -eq 1 ]]
+then
+    for file in "$@"
+    do
+        if [[ "${file##*/}" != flatpak*.list ]] && grep -qx 'add:akmod-nvidia' "$file"
+        then
+            check_nvidia_config || exit 5;
+            if ! check_pkg rpmfusion-free-release || ! check_pkg rpmfusion-nonfree-release
+            then
+                echo -e "\033[31mERREUR\033[0m Installer les dépôts RPM Fusion Free et Nonfree avant les paquets NVIDIA"
+                exit 5;
+            fi
+            break
+        fi
+    done
+    for file in "$@"
+    do
+        echo "- - - Gestion des paquets : $file"
+        apply_pkg_list "$file" || exit 5;
+    done
+    if [[ $ISNVIDIA -eq 1 ]]
+    then
+        echo -n "- - - Préparation des modules NVIDIA : "
+        if prepare_nvidia
+        then
+            echo -e "\033[32mOK\033[0m"
+            echo "Redémarrer normalement puis vérifier le pilote avec nvidia-smi."
+        else
+            echo -e "\033[31mERREUR\033[0m Voir le log : $LOGFILE. Ne pas redémarrer avant correction."
+            exit 5;
+        fi
+    fi
+    exit 0;
+fi
 
 ## CAS CHECK-UPDATES
 if [[ "$1" = "check" ]]
@@ -533,6 +825,20 @@ then
     exit;
 fi
 
+### VERIF NVIDIA
+if [[ $ISFC -eq 1 && -f "$NVFILE" ]]
+then
+    if grep -q '^add:' "$NVFILE"
+    then
+        if ! grep -qx 'add:akmod-nvidia' "$NVFILE"
+        then
+            echo -e "\033[31mERREUR\033[0m Activer add:akmod-nvidia dans $NVLIST"
+            exit 5;
+        fi
+        check_nvidia_config || exit 5;
+    fi
+fi
+
 ### CONF DNF
 echo "01- Vérification configuration DNF"
 if [[ $(grep -c 'max_parallel_downloads=' /etc/dnf/dnf.conf) -lt 1 ]]
@@ -582,8 +888,8 @@ echo -n "03- Mise à jour du système FLATPAK : "
 flatpak update --noninteractive >> "$LOGFILE"  2>&1
 check_cmd
 
-# Verif si reboot nécessaire
-if ! need_reboot
+# Verif si reboot nécessaire (reportée à la fin si NVIDIA)
+if [[ $ISNVIDIA -eq 0 ]] && ! need_reboot
 then
     ask_reboot
 fi
@@ -866,6 +1172,13 @@ do
     fi
 done
 
+## INSTALL NVIDIA
+if [[ $ISNVIDIA -eq 1 ]]
+then
+    echo "- - - Vérification du pilote NVIDIA"
+    install_nvidia || exit 5;
+fi
+
 ### SWAPPING DES SOFT 
 echo "06- Vérification swapping des composants"
 
@@ -1138,8 +1451,22 @@ then
     check_cmd
 fi
 
+# Préparation NVIDIA avant de proposer un redémarrage
+if [[ $ISNVIDIA -eq 1 ]]
+then
+    echo -n "- - - Préparation des modules NVIDIA : "
+    if prepare_nvidia
+    then
+        echo -e "\033[32mOK\033[0m"
+        echo "Après redémarrage : vérifier le pilote avec nvidia-smi et mettre à jour les Flatpak."
+    else
+        echo -e "\033[31mERREUR\033[0m Voir le log : $LOGFILE. Ne pas redémarrer avant correction."
+        exit 5;
+    fi
+fi
+
 # Verif si reboot nécessaire
-if ! need_reboot
+if [[ $NVIDIAREBOOT -eq 1 ]] || ! need_reboot
 then
     ask_reboot
 fi

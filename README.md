@@ -30,6 +30,8 @@ Ma configuration de Fedora (base Fedora Workstation). Configure & Met à jour Fe
 
  **flatpak-fc.list** : Fichier de flatpak à ajouter ou retirer du système
 
+ **nvidia-fc.list** : Fichier optionnel de paquets NVIDIA à ajouter (Fedora uniquement)
+
 *Il existe les mêmes fichiers avec "-el" utilisés pour Enterprise Linux*
 
 
@@ -58,6 +60,21 @@ Il est possible d'avoir un aperçu des mises à jour disponibles dans les dépô
 
 
 
+## Appliquer uniquement certaines listes
+
+    sudo ./config.sh files fichier1.list fichier2.list
+
+Seuls les fichiers indiqués sont traités, dans l'ordre donné. Tous sont vérifiés
+avant installation. Les lignes `add:paquet` et `del:paquet`, les commentaires et
+les lignes vides sont acceptés. Les listes dont le nom commence par `flatpak`
+sont traitées avec Flatpak ; les autres sont des listes RPM.
+
+Ce mode ne configure pas les dépôts, ne met pas à jour le système et n'applique
+pas les réglages du lancement normal. Les dépôts nécessaires doivent déjà être
+installés. Les dépendances des paquets restent gérées par DNF et Flatpak.
+Une erreur arrête le traitement, sans annuler les installations précédentes.
+Sans argument, le fonctionnement habituel est conservé.
+
 ## Opérations réalisées par le script
 
 Le script lancé va effectuer les opérations suivantes : 
@@ -74,3 +91,32 @@ Le script lancé va effectuer les opérations suivantes :
  10. Ajouter ou Supprimer les paquets flatpak paramétrés dans le fichier flatpak.list 
  11. Personnaliser la configuration du système + *Proposition de redémarrage du système si nécessaire*
 
+
+## Pilote NVIDIA (Fedora uniquement)
+
+L'installation est optionnelle : les lignes de `nvidia-fc.list` sont commentées
+par défaut. Vérifier la compatibilité de la carte avec le pilote courant RPM
+Fusion avant de décommenter les paquets souhaités. `add:akmod-nvidia` est obligatoire.
+Les anciennes branches et Fedora Atomic ne sont pas gérées par cette option.
+
+Pour appliquer uniquement cette liste :
+
+    sudo ./config.sh files nvidia-fc.list
+
+Ce mode nécessite RPM Fusion Free et Nonfree déjà installés. La liste est également
+prise en compte lors du lancement normal, après la configuration de RPM Fusion.
+
+Le script vérifie la présence d'une carte NVIDIA sur Fedora x86_64 et l'état de
+Secure Boot. Si Secure Boot est actif, la clé akmods doit être préparée et enrôlée
+au préalable, sinon le script s'arrête. `mokutil` est installé si nécessaire.
+Voir https://rpmfusion.org/Howto/Secure%20Boot
+
+Les paquets NVIDIA sont installés avec la vérification GPG activée. Avant la fin,
+le script prépare les modules pour le noyau actif et le dernier installé (avec les
+paquets `kernel-devel` nécessaires), vérifie leur version et reconstruit les images
+de démarrage. En cas d'échec, consulter `/tmp/config-progress.log` et corriger le
+problème avant de redémarrer. Aucun redémarrage n'est proposé par le mode `files`.
+
+Après un redémarrage normal, vérifier le pilote avec `nvidia-smi` puis mettre à jour
+les Flatpak. Les modes `check`, `testing`, `offline` et `upgrade` ne passent pas par
+cette préparation NVIDIA. `scriptupdate` remplace le script par la version d'origine.
