@@ -1,0 +1,11 @@
+# Pilote NVIDIA courant RPM Fusion (Fedora x86_64 uniquement)
+# Vérifier la compatibilité de la carte avant activation (pas les anciennes branches)
+# Décommenter les lignes add: souhaitées ; akmod-nvidia est obligatoire
+#add:akmod-nvidia
+#add:xorg-x11-drv-nvidia-cuda
+
+# Bibliothèques 32 bits pour Steam et les jeux
+#add:xorg-x11-drv-nvidia-libs.i686
+
+# Diagnostic Vulkan
+#add:vulkan-tools
