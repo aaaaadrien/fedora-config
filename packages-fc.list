@@ -54,6 +54,7 @@ add:ShellCheck
 
 # CLI : Système
 add:htop
+add:btop
 add:nmon
 add:glances
 del:neofetch
